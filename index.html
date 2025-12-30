@@ -3,443 +3,421 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Lumina AI - Chat Experience</title>
+    <title>habibiDWL AI - Professional Reggae Experience</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
         
+        :root {
+            --reggae-green: #1b5e20;
+            --reggae-yellow: #fbc02d;
+            --reggae-red: #b71c1c;
+            --reggae-accent: #f9a825;
+        }
+
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Plus Jakarta Sans', sans-serif;
             overscroll-behavior-y: contain;
+            background-color: #f8fafc;
+        }
+
+        .dark body {
+            background-color: #020617;
+        }
+
+        /* Running Cards Animation */
+        .card-carousel {
+            display: flex;
+            overflow: hidden;
+            width: 100%;
+            padding: 10px 0;
+            background: rgba(255, 255, 255, 0.5);
+        }
+        .dark .card-carousel { background: rgba(15, 23, 42, 0.5); }
+
+        .card-track {
+            display: flex;
+            gap: 15px;
+            animation: scrollCards 25s linear infinite;
+        }
+
+        @keyframes scrollCards {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .info-card {
+            flex: 0 0 200px;
+            padding: 12px;
+            border-radius: 16px;
+            background: white;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .dark .info-card {
+            background: #1e293b;
+            border-color: #334155;
         }
 
         .chat-container {
-            height: calc(100vh - 140px);
+            height: calc(100vh - 240px); /* Adjusted for carousel */
+            scroll-behavior: smooth;
         }
 
-        .glass-morphism {
+        .reggae-gradient-text {
+            background: linear-gradient(90deg, var(--reggae-green), var(--reggae-yellow), var(--reggae-red));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+        }
+
+        /* Message Bubbles */
+        .animate-pop {
+            animation: popMsg 0.4s cubic-bezier(0.26, 1.36, 0.4, 1) forwards;
+        }
+
+        @keyframes popMsg {
+            0% { opacity: 0; transform: scale(0.8) translateY(20px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .typing-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            animation: typingBounce 1.4s infinite ease-in-out;
+        }
+        @keyframes typingBounce {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+
+        .glass-ui {
             background: rgba(255, 255, 255, 0.8);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            border-top: 1px solid rgba(0, 0, 0, 0.05);
         }
-
-        .dark .glass-morphism {
+        .dark .glass-ui {
             background: rgba(15, 23, 42, 0.9);
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .typing-indicator span {
-            display: inline-block;
-            width: 4px;
-            height: 4px;
-            background-color: currentColor;
-            border-radius: 50%;
-            margin-right: 2px;
-            animation: bounce 1.3s linear infinite;
+        /* Pulse for Voice */
+        .pulse-red {
+            box-shadow: 0 0 0 0 rgba(183, 28, 28, 0.7);
+            animation: pulse-red 2s infinite;
         }
-        .typing-indicator span:nth-child(2) { animation-delay: -1.1s; }
-        .typing-indicator span:nth-child(3) { animation-delay: -0.9s; }
-
-        @keyframes bounce {
-            0%, 60%, 100% { transform: translateY(0); }
-            30% { transform: translateY(-4px); }
-        }
-
-        .sidebar-transition {
-            transition: transform 0.3s ease-in-out;
-        }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 4px;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: rgba(0,0,0,0.1);
-            border-radius: 10px;
-        }
-        .dark ::-webkit-scrollbar-thumb {
-            background: rgba(255,255,255,0.1);
-        }
-
-        .image-loading {
-            position: relative;
-            overflow: hidden;
-            background: #f3f4f6;
-        }
-        .image-loading::after {
-            content: "";
-            position: absolute;
-            top: 0; right: 0; bottom: 0; left: 0;
-            transform: translateX(-100%);
-            background-image: linear-gradient(90deg, rgba(255,255,255,0) 0, rgba(255,255,255,0.2) 20%, rgba(255,255,255,0.5) 60%, rgba(255,255,255,0));
-            animation: shimmer 2s infinite;
-        }
-        @keyframes shimmer {
-            100% { transform: translateX(100%); }
+        @keyframes pulse-red {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(183, 28, 28, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(183, 28, 28, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(183, 28, 28, 0); }
         }
     </style>
 </head>
-<body class="bg-gray-50 dark:bg-slate-900 text-gray-900 dark:text-gray-100 transition-colors duration-300">
+<body class="dark:text-white transition-colors duration-300">
 
-    <!-- Mobile Sidebar / History -->
-    <div id="sidebar" class="fixed inset-0 z-50 transform -translate-x-full sidebar-transition">
-        <div class="absolute inset-0 bg-black bg-opacity-50" onclick="toggleSidebar()"></div>
-        <div class="relative w-4/5 max-w-xs h-full bg-white dark:bg-slate-800 p-4 shadow-xl">
-            <div class="flex items-center justify-between mb-6">
-                <h2 class="text-xl font-bold">Riwayat Chat</h2>
-                <button onclick="toggleSidebar()" class="p-2 text-gray-500"><i class="fas fa-times"></i></button>
+    <!-- Sidebar -->
+    <div id="sidebar" class="fixed inset-0 z-50 transform -translate-x-full transition-transform duration-300 ease-in-out">
+        <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" onclick="toggleSidebar()"></div>
+        <div class="relative w-80 h-full bg-white dark:bg-slate-900 shadow-2xl p-6 flex flex-col">
+            <div class="flex items-center justify-between mb-8 border-b pb-4 dark:border-slate-800">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-green-600 via-yellow-400 to-red-600 flex items-center justify-center text-white font-bold">H</div>
+                    <h2 class="text-xl font-bold tracking-tight">habibiDWL AI</h2>
+                </div>
+                <button onclick="toggleSidebar()" class="text-gray-400 hover:text-red-500"><i class="fas fa-times"></i></button>
             </div>
-            <button onclick="newChat()" class="w-full flex items-center justify-center gap-2 bg-blue-600 text-white p-3 rounded-xl mb-4 hover:bg-blue-700 transition">
-                <i class="fas fa-plus"></i> Chat Baru
+            
+            <button onclick="window.location.reload()" class="flex items-center justify-center gap-3 w-full p-4 rounded-2xl bg-gradient-to-r from-green-600 to-green-700 text-white font-bold hover:shadow-lg transition mb-6">
+                <i class="fas fa-plus"></i>
+                <span>Sesi Baru</span>
             </button>
-            <div id="history-list" class="space-y-2 overflow-y-auto h-[70vh]">
-                <!-- History items will be injected here -->
+
+            <div class="flex-1 overflow-y-auto space-y-3" id="history">
+                <p class="text-[10px] uppercase font-bold text-gray-400 px-2">Percakapan Terakhir</p>
+                <!-- History Items can go here -->
+            </div>
+
+            <div class="mt-auto pt-4 border-t dark:border-slate-800">
+                <div class="bg-gray-50 dark:bg-slate-800 p-3 rounded-xl flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-reggae-yellow flex items-center justify-center text-black font-bold">U</div>
+                    <div class="text-xs">
+                        <p class="font-bold">Pengguna VIP</p>
+                        <p class="opacity-60 italic">"Good Vibes Only"</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
     <!-- Header -->
-    <header class="fixed top-0 left-0 right-0 h-16 flex items-center justify-between px-4 z-40 bg-white dark:bg-slate-900 border-b dark:border-slate-800">
-        <button onclick="toggleSidebar()" class="p-2 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-lg">
-            <i class="fas fa-bars text-xl"></i>
+    <header class="fixed top-0 inset-x-0 h-16 z-40 glass-ui flex items-center justify-between px-5 border-b dark:border-slate-800">
+        <button onclick="toggleSidebar()" class="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-gray-100 dark:hover:bg-slate-800 transition">
+            <i class="fas fa-align-left text-reggae-green text-lg"></i>
         </button>
+        
         <div class="flex flex-col items-center">
-            <span class="font-bold text-lg tracking-tight">Lumina AI</span>
-            <span class="text-[10px] text-green-500 font-medium">● Online</span>
+            <h1 class="reggae-gradient-text text-lg tracking-tighter">habibiDWL AI</h1>
+            <span class="text-[8px] font-black uppercase tracking-[0.2em] opacity-40">Pro Multimodal Engine</span>
         </div>
-        <button onclick="toggleDarkMode()" id="theme-toggle" class="p-2 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-lg">
-            <i class="fas fa-moon dark:hidden"></i>
-            <i class="fas fa-sun hidden dark:block"></i>
+
+        <button onclick="toggleDarkMode()" class="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-gray-100 dark:hover:bg-slate-800 transition">
+            <i class="fas fa-sun text-reggae-yellow hidden dark:block"></i>
+            <i class="fas fa-moon text-reggae-red dark:hidden"></i>
         </button>
     </header>
 
-    <!-- Main Chat Area -->
-    <main id="chat-box" class="chat-container pt-20 pb-4 overflow-y-auto px-4 space-y-4">
-        <!-- Initial Welcome Message -->
-        <div class="flex flex-col items-center justify-center h-full text-center opacity-60 space-y-4" id="welcome-screen">
-            <div class="w-16 h-16 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
-                <i class="fas fa-robot text-3xl text-blue-600 dark:text-blue-400"></i>
+    <!-- Running Cards Carousel -->
+    <div class="fixed top-16 inset-x-0 z-30 card-carousel">
+        <div class="card-track">
+            <!-- First Set -->
+            <div class="info-card flex items-center gap-3">
+                <i class="fas fa-bolt text-reggae-yellow"></i>
+                <div class="text-[10px] font-bold">Respons Super Cepat</div>
             </div>
-            <div>
-                <h1 class="text-xl font-bold">Halo! Saya Lumina.</h1>
-                <p class="text-sm px-8">Tanyakan apa saja, buat gambar, atau analisis foto bersamaku.</p>
+            <div class="info-card flex items-center gap-3">
+                <i class="fas fa-brain text-reggae-green"></i>
+                <div class="text-[10px] font-bold">Akurasi GPT-4o Level</div>
             </div>
-            <div class="grid grid-cols-2 gap-2 w-full max-w-xs">
-                <button onclick="suggest('Buatkan ide bisnis')" class="p-2 text-[11px] border rounded-lg dark:border-slate-700">"Ide bisnis..."</button>
-                <button onclick="suggest('Gambar kucing di bulan')" class="p-2 text-[11px] border rounded-lg dark:border-slate-700">"Gambar kucing..."</button>
+            <div class="info-card flex items-center gap-3">
+                <i class="fas fa-image text-reggae-red"></i>
+                <div class="text-[10px] font-bold">Bisa Analisis Gambar</div>
+            </div>
+            <div class="info-card flex items-center gap-3">
+                <i class="fas fa-music text-blue-500"></i>
+                <div class="text-[10px] font-bold">Lirik & Musik Reggae</div>
+            </div>
+            <!-- Duplicated for Infinite Scroll -->
+            <div class="info-card flex items-center gap-3">
+                <i class="fas fa-bolt text-reggae-yellow"></i>
+                <div class="text-[10px] font-bold">Respons Super Cepat</div>
+            </div>
+            <div class="info-card flex items-center gap-3">
+                <i class="fas fa-brain text-reggae-green"></i>
+                <div class="text-[10px] font-bold">Akurasi GPT-4o Level</div>
+            </div>
+            <div class="info-card flex items-center gap-3">
+                <i class="fas fa-image text-reggae-red"></i>
+                <div class="text-[10px] font-bold">Bisa Analisis Gambar</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chat Space -->
+    <main id="chat-viewport" class="chat-container mt-32 px-4 py-6 space-y-6 overflow-y-auto">
+        <div id="empty-state" class="flex flex-col items-center justify-center min-h-[50vh] text-center space-y-6">
+            <div class="relative w-28 h-28 bg-gradient-to-tr from-green-600 via-yellow-400 to-red-600 rounded-3xl rotate-12 flex items-center justify-center shadow-2xl">
+                <i class="fas fa-robot text-white text-5xl -rotate-12"></i>
+            </div>
+            <div class="px-6">
+                <h2 class="text-2xl font-extrabold mb-1">Ada yang bisa Habibi bantu?</h2>
+                <p class="text-sm opacity-50">Tulis kode, kirim foto, atau sekadar sapa santai kawan!</p>
+            </div>
+            <div class="grid grid-cols-2 gap-3 w-full max-w-sm">
+                <button onclick="fastAsk('Tolong jelaskan cara coding Python')" class="p-3 text-[11px] bg-white dark:bg-slate-800 border dark:border-slate-700 rounded-2xl shadow-sm hover:scale-105 transition">Belajar Coding</button>
+                <button onclick="fastAsk('Buatkan puisi tentang pantai kawan')" class="p-3 text-[11px] bg-white dark:bg-slate-800 border dark:border-slate-700 rounded-2xl shadow-sm hover:scale-105 transition">Buat Puisi</button>
             </div>
         </div>
     </main>
 
-    <!-- Bottom Action Area -->
-    <div class="fixed bottom-0 left-0 right-0 glass-morphism p-4 z-40">
-        <div id="image-preview-container" class="hidden mb-2 p-2 bg-gray-100 dark:bg-slate-800 rounded-lg flex items-center gap-3 relative">
-            <img id="image-preview" src="" class="w-12 h-12 object-cover rounded shadow-sm">
-            <div class="flex-1">
-                <p class="text-[10px] font-bold">Gambar Terpilih</p>
-                <p class="text-[10px] opacity-60">Siap dianalisis</p>
+    <!-- Bottom Interface -->
+    <footer class="fixed bottom-0 inset-x-0 p-4 pb-8 glass-ui border-t dark:border-slate-800 z-40">
+        <!-- File Preview -->
+        <div id="file-preview" class="hidden mb-4 p-3 bg-gray-50 dark:bg-slate-800/50 rounded-2xl flex items-center gap-4 border-2 border-dashed border-reggae-yellow animate-pop">
+            <div class="relative w-16 h-16 rounded-xl overflow-hidden shadow-lg">
+                <img id="preview-img" class="w-full h-full object-cover">
             </div>
-            <button onclick="clearImage()" class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-[10px]">
-                <i class="fas fa-times"></i>
+            <div class="flex-1">
+                <p class="text-[11px] font-extrabold uppercase text-reggae-green">File Gambar Terpilih</p>
+                <p class="text-[10px] opacity-60">Siap dikirim ke habibiDWL AI</p>
+            </div>
+            <button onclick="clearFile()" class="w-10 h-10 bg-reggae-red text-white rounded-full flex items-center justify-center shadow-md active:scale-90">
+                <i class="fas fa-trash-alt"></i>
             </button>
         </div>
 
-        <div class="flex items-end gap-2 max-w-3xl mx-auto">
-            <div class="flex-1 relative bg-white dark:bg-slate-800 border dark:border-slate-700 rounded-2xl shadow-sm overflow-hidden flex items-end">
-                <button onclick="triggerFileSelect()" class="p-3 text-gray-400 hover:text-blue-500 transition">
-                    <i class="fas fa-image"></i>
+        <div class="max-w-4xl mx-auto flex items-end gap-3">
+            <div class="flex-1 bg-white dark:bg-slate-800 rounded-[28px] border dark:border-slate-700 flex items-end p-1.5 shadow-xl transition-all focus-within:ring-2 ring-reggae-yellow/50">
+                <button onclick="triggerFile()" class="p-3 text-gray-400 hover:text-reggae-green transition-all">
+                    <i class="fas fa-file-image text-xl"></i>
                 </button>
                 <textarea 
-                    id="user-input" 
+                    id="user-msg" 
                     rows="1" 
-                    placeholder="Tanya Lumina..." 
-                    class="w-full py-3 bg-transparent outline-none resize-none max-h-32 text-sm"
-                    oninput="autoResize(this)"></textarea>
-                <button onclick="startVoiceRecognition()" id="mic-btn" class="p-3 text-gray-400 hover:text-red-500 transition">
-                    <i class="fas fa-microphone"></i>
+                    placeholder="Kirim pesan ke Habibi..." 
+                    class="w-full py-3 bg-transparent outline-none resize-none text-sm max-h-40"
+                    oninput="resizeTxt(this)"></textarea>
+                <button onclick="startMic()" id="mic-btn" class="p-3 text-gray-400 hover:text-reggae-red transition-all">
+                    <i class="fas fa-microphone text-xl"></i>
                 </button>
             </div>
-            <button 
-                onclick="handleSend()" 
-                id="send-btn" 
-                class="w-12 h-12 flex items-center justify-center bg-blue-600 text-white rounded-2xl shadow-lg shadow-blue-200 dark:shadow-none hover:bg-blue-700 transition transform active:scale-95">
+            <button onclick="onSend()" id="send-btn" class="w-14 h-14 rounded-full bg-gradient-to-br from-green-600 to-green-800 text-white shadow-lg flex items-center justify-center text-xl hover:shadow-green-500/40 transition-all active:scale-90">
                 <i class="fas fa-paper-plane"></i>
             </button>
         </div>
-        <p class="text-[9px] text-center mt-2 opacity-40">AI dapat memberikan informasi yang tidak akurat.</p>
-    </div>
+        <p class="text-[9px] text-center mt-3 opacity-30 font-medium">Powered by Gemini 2.5 Flash • Professional Edition</p>
+    </footer>
 
-    <!-- Hidden File Input -->
-    <input type="file" id="file-input" class="hidden" accept="image/*" onchange="handleImageSelection(event)">
+    <input type="file" id="file-input" class="hidden" accept="image/*" onchange="handleFile(event)">
 
     <script>
-        const apiKey = ""; // Diset oleh environment
-        let selectedImageData = null;
-        let isGenerating = false;
-        let chatHistory = [];
+        const apiKey = "";
+        let currentFile = null;
+        let busy = false;
 
-        // --- Core UI Functions ---
-        
-        function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            sidebar.classList.toggle('-translate-x-full');
-        }
+        // UI
+        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('-translate-x-full'); }
+        function toggleDarkMode() { document.documentElement.classList.toggle('dark'); }
+        function resizeTxt(e) { e.style.height = 'auto'; e.style.height = e.scrollHeight + 'px'; }
+        function triggerFile() { document.getElementById('file-input').click(); }
+        function fastAsk(t) { document.getElementById('user-msg').value = t; onSend(); }
 
-        function toggleDarkMode() {
-            document.documentElement.classList.toggle('dark');
-        }
-
-        function autoResize(textarea) {
-            textarea.style.height = 'auto';
-            textarea.style.height = textarea.scrollHeight + 'px';
-        }
-
-        function suggest(text) {
-            document.getElementById('user-input').value = text;
-            handleSend();
-        }
-
-        function triggerFileSelect() {
-            document.getElementById('file-input').click();
-        }
-
-        function handleImageSelection(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    selectedImageData = e.target.result.split(',')[1]; // Base64 part
-                    document.getElementById('image-preview').src = e.target.result;
-                    document.getElementById('image-preview-container').classList.remove('hidden');
+        function handleFile(e) {
+            const f = e.target.files[0];
+            if (f) {
+                const r = new FileReader();
+                r.onload = (ev) => {
+                    currentFile = ev.target.result.split(',')[1];
+                    document.getElementById('preview-img').src = ev.target.result;
+                    document.getElementById('file-preview').classList.remove('hidden');
                 };
-                reader.readAsDataURL(file);
+                r.readAsDataURL(f);
             }
         }
 
-        function clearImage() {
-            selectedImageData = null;
+        function clearFile() {
+            currentFile = null;
             document.getElementById('file-input').value = '';
-            document.getElementById('image-preview-container').classList.add('hidden');
+            document.getElementById('file-preview').classList.add('hidden');
         }
 
-        // --- API & Chat Logic ---
+        // Logic
+        async function onSend() {
+            const input = document.getElementById('user-msg');
+            const txt = input.value.trim();
+            if ((!txt && !currentFile) || busy) return;
 
-        async function handleSend() {
-            const inputField = document.getElementById('user-input');
-            const message = inputField.value.trim();
+            const empty = document.getElementById('empty-state');
+            if (empty) empty.remove();
+
+            appendMsg('user', txt, currentFile);
             
-            if ((!message && !selectedImageData) || isGenerating) return;
+            input.value = '';
+            input.style.height = 'auto';
+            const fileToSend = currentFile;
+            clearFile();
 
-            // Hide welcome screen if first message
-            const welcome = document.getElementById('welcome-screen');
-            if (welcome) welcome.remove();
-
-            // Render User Message
-            addMessageToUI('user', message, selectedImageData);
-            
-            // Cleanup input
-            inputField.value = '';
-            inputField.style.height = 'auto';
-            const tempImgData = selectedImageData;
-            clearImage();
-
-            isGenerating = true;
-            document.getElementById('send-btn').innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-
-            // Check if it's an image generation request
-            const isImageGen = /gambar|lukis|image|photo/i.test(message) && !tempImgData;
+            busy = true;
+            toggleBtn(true);
+            const botId = appendMsg('bot', '', null, true);
 
             try {
-                if (isImageGen) {
-                    await generateAIImage(message);
+                const isDrawing = /gambar|lukis|buatkan foto/i.test(txt) && !fileToSend;
+                if (isDrawing) {
+                    await handleDraw(txt, botId);
                 } else {
-                    await generateAIText(message, tempImgData);
+                    await handleChat(txt, fileToSend, botId);
                 }
             } catch (err) {
-                addMessageToUI('ai', "Maaf, terjadi kesalahan teknis. Silakan coba lagi nanti.");
-                console.error(err);
+                document.getElementById(botId).querySelector('.text-box').innerHTML = "Waduh kawan, koneksi Habibi lagi terganggu. Coba sebentar lagi ya!";
             } finally {
-                isGenerating = false;
-                document.getElementById('send-btn').innerHTML = '<i class="fas fa-paper-plane"></i>';
+                busy = false;
+                toggleBtn(false);
             }
         }
 
-        async function generateAIText(prompt, base64Image) {
-            const botMessageId = addMessageToUI('ai', '', null, true);
-            const botEl = document.getElementById(botMessageId);
-            const contentEl = botEl.querySelector('.message-content');
-
-            let retries = 0;
-            const maxRetries = 5;
-
-            const callAPI = async () => {
-                const payload = {
-                    contents: [{
-                        parts: [
-                            { text: prompt || "Analisis gambar ini" }
-                        ]
-                    }],
-                    systemInstruction: {
-                        parts: [{ text: "Kamu adalah Lumina AI, asisten virtual cerdas yang ramah, modern, dan sangat membantu. Gunakan bahasa Indonesia yang natural." }]
-                    }
-                };
-
-                if (base64Image) {
-                    payload.contents[0].parts.push({
-                        inlineData: { mimeType: "image/png", data: base64Image }
-                    });
-                }
-
-                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-
-                if (!response.ok) throw new Error('API Error');
-                return await response.json();
-            };
-
-            const runWithBackoff = async (attempt) => {
-                try {
-                    return await callAPI();
-                } catch (e) {
-                    if (attempt < maxRetries) {
-                        await new Promise(r => setTimeout(r, Math.pow(2, attempt) * 1000));
-                        return runWithBackoff(attempt + 1);
-                    }
-                    throw e;
+        async function handleChat(prompt, img, bId) {
+            const box = document.getElementById(bId).querySelector('.text-box');
+            const payload = {
+                contents: [{
+                    parts: [{ text: prompt || "Tolong bantu saya kawan." }]
+                }],
+                systemInstruction: {
+                    parts: [{ text: "Nama kamu adalah habibiDWL AI. Kamu adalah AI profesional, cerdas, akurat, dan sangat membantu. Gaya bicaramu santai seperti budaya reggae (gunakan kata kawan, damai, dll) tapi tetap memberikan jawaban teknis yang sangat tepat dan benar. Jika user bertanya tentang coding atau pengetahuan umum, berikan jawaban selevel ChatGPT Pro." }]
                 }
             };
 
-            const result = await runWithBackoff(0);
-            const text = result.candidates?.[0]?.content?.parts?.[0]?.text || "Saya tidak mengerti.";
+            if (img) payload.contents[0].parts.push({ inlineData: { mimeType: "image/png", data: img } });
+
+            const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            const data = await res.json();
+            const text = data.candidates?.[0]?.content?.parts?.[0]?.text || "Maaf kawan, aku terdiam sejenak.";
             
-            // Typing effect
-            contentEl.innerHTML = '';
+            box.innerHTML = "";
             let i = 0;
-            const interval = setInterval(() => {
-                contentEl.innerHTML += text[i];
+            const timer = setInterval(() => {
+                box.innerHTML += text[i];
                 i++;
                 if (i >= text.length) {
-                    clearInterval(interval);
-                    scrollToBottom();
+                    clearInterval(timer);
+                    document.getElementById('chat-viewport').scrollTop = document.getElementById('chat-viewport').scrollHeight;
                 }
-            }, 5);
+            }, 10);
         }
 
-        async function generateAIImage(prompt) {
-            const botMessageId = addMessageToUI('ai', 'Sedang melukis untukmu...', null, true);
-            const botEl = document.getElementById(botMessageId);
-            const contentEl = botEl.querySelector('.message-content');
-
-            contentEl.innerHTML = `
-                <div class="flex flex-col gap-2">
-                    <p class="text-xs italic opacity-70">"Menciptakan: ${prompt}"</p>
-                    <div class="w-full aspect-square rounded-xl image-loading flex items-center justify-center">
-                        <i class="fas fa-palette text-blue-500 animate-pulse text-3xl"></i>
-                    </div>
-                </div>
-            `;
-
+        async function handleDraw(prompt, bId) {
+            const box = document.getElementById(bId).querySelector('.text-box');
+            box.innerHTML = `<p class="italic opacity-60 text-xs">Menyiapkan kanvas dan cat warna...</p><div class="w-full h-48 bg-gray-200 dark:bg-slate-800 rounded-2xl animate-pulse mt-2"></div>`;
+            
             try {
-                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-generate-001:predict?key=${apiKey}`, {
+                const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-generate-001:predict?key=${apiKey}`, {
                     method: 'POST',
-                    body: JSON.stringify({
-                        instances: { prompt: prompt },
-                        parameters: { sampleCount: 1 }
-                    })
+                    body: JSON.stringify({ instances: { prompt: prompt }, parameters: { sampleCount: 1 } })
                 });
-
-                const result = await response.json();
-                const imageUrl = `data:image/png;base64,${result.predictions[0].bytesBase64Encoded}`;
-
-                contentEl.innerHTML = `
-                    <div class="flex flex-col gap-3">
-                        <img src="${imageUrl}" class="w-full rounded-xl shadow-md border dark:border-slate-700">
-                        <p class="text-xs opacity-70">Hasil karya Lumina untukmu.</p>
-                        <button onclick="downloadImage('${imageUrl}')" class="text-[10px] text-blue-500 font-bold self-start"><i class="fas fa-download"></i> Simpan</button>
-                    </div>
-                `;
-            } catch (err) {
-                contentEl.innerHTML = "Maaf, gagal membuat gambar saat ini.";
-            }
-            scrollToBottom();
+                const data = await res.json();
+                const url = `data:image/png;base64,${data.predictions[0].bytesBase64Encoded}`;
+                box.innerHTML = `
+                    <div class="space-y-3">
+                        <img src="${url}" class="w-full rounded-2xl shadow-xl border-4 border-white dark:border-slate-700">
+                        <div class="flex justify-between items-center px-1">
+                            <span class="text-[10px] font-bold opacity-50 italic">Lukisan Habibi kawan</span>
+                            <a href="${url}" download="habibi-art.png" class="text-xs text-reggae-green font-bold uppercase"><i class="fas fa-save"></i> Simpan</a>
+                        </div>
+                    </div>`;
+            } catch (e) { box.innerHTML = "Gagal melukis kawan, kuasnya hilang!"; }
         }
 
-        function downloadImage(url) {
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = `LuminaAI-${Date.now()}.png`;
-            link.click();
-        }
+        function appendMsg(role, txt, img, loading = false) {
+            const vp = document.getElementById('chat-viewport');
+            const id = 'm-' + Date.now();
+            const wrap = document.createElement('div');
+            wrap.id = id;
+            wrap.className = `flex ${role === 'user' ? 'justify-end' : 'justify-start'} animate-pop`;
 
-        function addMessageToUI(role, text, base64 = null, isBotPlaceholder = false) {
-            const chatBox = document.getElementById('chat-box');
-            const id = 'msg-' + Date.now();
-            
-            const msgDiv = document.createElement('div');
-            msgDiv.id = id;
-            msgDiv.className = `flex ${role === 'user' ? 'justify-end' : 'justify-start'} animate-in fade-in slide-in-from-bottom-2 duration-300`;
-
-            const innerHTML = `
-                <div class="max-w-[85%] ${role === 'user' ? 'bg-blue-600 text-white rounded-2xl rounded-tr-none shadow-sm' : 'bg-white dark:bg-slate-800 border dark:border-slate-700 rounded-2xl rounded-tl-none shadow-sm'} p-3">
-                    ${base64 ? `<img src="data:image/png;base64,${base64}" class="w-48 h-auto rounded-lg mb-2 border border-black/10">` : ''}
-                    <div class="message-content text-sm leading-relaxed whitespace-pre-wrap">${isBotPlaceholder ? '<div class="typing-indicator"><span></span><span></span><span></span></div>' : text}</div>
+            wrap.innerHTML = `
+                <div class="max-w-[85%] ${role === 'user' ? 'bg-gradient-to-r from-green-700 to-green-600 text-white rounded-[24px] rounded-tr-none shadow-md' : 'bg-white dark:bg-slate-800 border dark:border-slate-700 rounded-[24px] rounded-tl-none shadow-sm'} p-4">
+                    ${img ? `<img src="data:image/png;base64,${img}" class="w-full h-auto rounded-xl mb-3 border border-black/5">` : ''}
+                    <div class="text-box text-sm leading-relaxed whitespace-pre-wrap">${loading ? '<div class="flex gap-1 py-1"><div class="typing-dot bg-reggae-green"></div><div class="typing-dot bg-reggae-yellow" style="animation-delay:0.2s"></div><div class="typing-dot bg-reggae-red" style="animation-delay:0.4s"></div></div>' : txt}</div>
                 </div>
             `;
-            
-            msgDiv.innerHTML = innerHTML;
-            chatBox.appendChild(msgDiv);
-            scrollToBottom();
+            vp.appendChild(wrap);
+            vp.scrollTop = vp.scrollHeight;
             return id;
         }
 
-        function scrollToBottom() {
-            const chatBox = document.getElementById('chat-box');
-            chatBox.scrollTo({ top: chatBox.scrollHeight, behavior: 'smooth' });
+        function toggleBtn(l) {
+            const b = document.getElementById('send-btn');
+            b.innerHTML = l ? '<i class="fas fa-circle-notch fa-spin"></i>' : '<i class="fas fa-paper-plane"></i>';
+            b.disabled = l;
         }
 
-        function newChat() {
-            document.getElementById('chat-box').innerHTML = `
-                <div class="flex flex-col items-center justify-center h-full text-center opacity-60 space-y-4" id="welcome-screen">
-                    <div class="w-16 h-16 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
-                        <i class="fas fa-robot text-3xl text-blue-600 dark:text-blue-400"></i>
-                    </div>
-                    <div>
-                        <h1 class="text-xl font-bold">Lumina Siap Membantu.</h1>
-                        <p class="text-sm px-8">Mari mulai percakapan baru.</p>
-                    </div>
-                </div>
-            `;
-            toggleSidebar();
+        function startMic() {
+            const m = document.getElementById('mic-btn');
+            m.classList.add('text-reggae-red', 'pulse-red');
+            setTimeout(() => { m.classList.remove('text-reggae-red', 'pulse-red'); }, 3000);
         }
 
-        // --- Voice recognition placeholder ---
-        function startVoiceRecognition() {
-            const mic = document.getElementById('mic-btn');
-            mic.classList.add('text-red-500', 'animate-pulse');
-            
-            // In a real environment, you'd use the Web Speech API
-            // Here we'll just simulate for 3 seconds
-            setTimeout(() => {
-                mic.classList.remove('text-red-500', 'animate-pulse');
-            }, 3000);
-            
-            // Note: Since this is an iframe environment, real Mic access 
-            // might be restricted, but the UI feedback is implemented.
-        }
-
-        // Handle enter key
-        document.getElementById('user-input').addEventListener('keydown', (e) => {
+        document.getElementById('user-msg').addEventListener('keydown', (e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
-                handleSend();
+                onSend();
             }
         });
-
     </script>
 </body>
 </html>
