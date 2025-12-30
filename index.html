@@ -13,33 +13,31 @@
             --reggae-green: #1b5e20;
             --reggae-yellow: #fbc02d;
             --reggae-red: #b71c1c;
-            --reggae-accent: #f9a825;
         }
 
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
-            overscroll-behavior-y: contain;
             background-color: #f8fafc;
+            overflow-x: hidden;
         }
 
-        .dark body {
-            background-color: #020617;
-        }
+        .dark body { background-color: #020617; }
 
-        /* Running Cards Animation */
+        /* Animasi Kartu Berjalan */
         .card-carousel {
             display: flex;
             overflow: hidden;
             width: 100%;
-            padding: 10px 0;
-            background: rgba(255, 255, 255, 0.5);
+            padding: 12px 0;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(5px);
         }
-        .dark .card-carousel { background: rgba(15, 23, 42, 0.5); }
+        .dark .card-carousel { background: rgba(15, 23, 42, 0.6); }
 
         .card-track {
             display: flex;
             gap: 15px;
-            animation: scrollCards 25s linear infinite;
+            animation: scrollCards 30s linear infinite;
         }
 
         @keyframes scrollCards {
@@ -48,22 +46,17 @@
         }
 
         .info-card {
-            flex: 0 0 200px;
-            padding: 12px;
-            border-radius: 16px;
+            flex: 0 0 220px;
+            padding: 12px 16px;
+            border-radius: 20px;
             background: white;
             border: 1px solid #e2e8f0;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
-        .dark .info-card {
-            background: #1e293b;
-            border-color: #334155;
-        }
-
-        .chat-container {
-            height: calc(100vh - 240px);
-            scroll-behavior: smooth;
-        }
+        .dark .info-card { background: #1e293b; border-color: #334155; }
 
         .reggae-gradient-text {
             background: linear-gradient(90deg, var(--reggae-green), var(--reggae-yellow), var(--reggae-red));
@@ -72,14 +65,17 @@
             font-weight: 800;
         }
 
-        .animate-pop {
-            animation: popMsg 0.4s cubic-bezier(0.26, 1.36, 0.4, 1) forwards;
+        .chat-container {
+            height: calc(100vh - 260px);
+            scroll-behavior: smooth;
         }
 
-        @keyframes popMsg {
-            0% { opacity: 0; transform: scale(0.8) translateY(20px); }
-            100% { opacity: 1; transform: scale(1) translateY(0); }
+        .glass-ui {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
         }
+        .dark .glass-ui { background: rgba(15, 23, 42, 0.9); }
 
         .typing-dot {
             width: 6px;
@@ -92,344 +88,203 @@
             40% { transform: scale(1); }
         }
 
-        .glass-ui {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-        }
-        .dark .glass-ui {
-            background: rgba(15, 23, 42, 0.9);
+        .animate-pop {
+            animation: popMsg 0.4s cubic-bezier(0.26, 1.36, 0.4, 1) forwards;
         }
 
-        .pulse-red {
-            box-shadow: 0 0 0 0 rgba(183, 28, 28, 0.7);
-            animation: pulse-red 2s infinite;
-        }
-        @keyframes pulse-red {
-            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(183, 28, 28, 0.7); }
-            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(183, 28, 28, 0); }
-            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(183, 28, 28, 0); }
+        @keyframes popMsg {
+            0% { opacity: 0; transform: scale(0.8) translateY(20px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
         }
     </style>
 </head>
 <body class="dark:text-white transition-colors duration-300">
 
-    <!-- Sidebar -->
-    <div id="sidebar" class="fixed inset-0 z-50 transform -translate-x-full transition-transform duration-300 ease-in-out">
-        <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" onclick="toggleSidebar()"></div>
-        <div class="relative w-80 h-full bg-white dark:bg-slate-900 shadow-2xl p-6 flex flex-col">
-            <div class="flex items-center justify-between mb-8 border-b pb-4 dark:border-slate-800">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-green-600 via-yellow-400 to-red-600 flex items-center justify-center text-white font-bold">H</div>
-                    <h2 class="text-xl font-bold tracking-tight">habibiDWL AI</h2>
-                </div>
-                <button onclick="toggleSidebar()" class="text-gray-400 hover:text-red-500"><i class="fas fa-times"></i></button>
-            </div>
-            
-            <button onclick="window.location.reload()" class="flex items-center justify-center gap-3 w-full p-4 rounded-2xl bg-gradient-to-r from-green-600 to-green-700 text-white font-bold hover:shadow-lg transition mb-6">
-                <i class="fas fa-plus"></i>
-                <span>Sesi Baru</span>
-            </button>
-
-            <div class="flex-1 overflow-y-auto space-y-3" id="history">
-                <p class="text-[10px] uppercase font-bold text-gray-400 px-2">Percakapan Terakhir</p>
-                <div class="p-3 text-xs opacity-50 italic">Belum ada riwayat kawan...</div>
-            </div>
-
-            <div class="mt-auto pt-4 border-t dark:border-slate-800">
-                <div class="bg-gray-50 dark:bg-slate-800 p-3 rounded-xl flex items-center gap-3">
-                    <div class="w-8 h-8 rounded-full bg-reggae-yellow flex items-center justify-center text-black font-bold">U</div>
-                    <div class="text-xs">
-                        <p class="font-bold">Pengguna VIP</p>
-                        <p class="opacity-60 italic">"Good Vibes Only"</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- Header -->
-    <header class="fixed top-0 inset-x-0 h-16 z-40 glass-ui flex items-center justify-between px-5 border-b dark:border-slate-800">
-        <button onclick="toggleSidebar()" class="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-gray-100 dark:hover:bg-slate-800 transition">
-            <i class="fas fa-align-left text-reggae-green text-lg"></i>
+    <header class="fixed top-0 inset-x-0 h-16 z-50 glass-ui flex items-center justify-between px-6 border-b dark:border-slate-800">
+        <button onclick="alert('Menu Samping Segera Hadir Kawan!')" class="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-gray-100 dark:hover:bg-slate-800">
+            <i class="fas fa-bars text-reggae-green"></i>
         </button>
         
-        <div class="flex flex-col items-center">
-            <h1 class="reggae-gradient-text text-lg tracking-tighter">habibiDWL AI</h1>
-            <span class="text-[8px] font-black uppercase tracking-[0.2em] opacity-40">Pro Multimodal Engine</span>
+        <div class="text-center">
+            <h1 class="reggae-gradient-text text-xl font-black">habibiDWL AI</h1>
+            <p class="text-[8px] uppercase tracking-widest opacity-50">Professional Reggae Engine</p>
         </div>
 
-        <button onclick="toggleDarkMode()" class="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-gray-100 dark:hover:bg-slate-800 transition">
-            <i class="fas fa-sun text-reggae-yellow hidden dark:block"></i>
-            <i class="fas fa-moon text-reggae-red dark:hidden"></i>
+        <button onclick="toggleDarkMode()" class="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-gray-100 dark:hover:bg-slate-800 text-reggae-yellow">
+            <i class="fas fa-moon dark:hidden"></i>
+            <i class="fas fa-sun hidden dark:block"></i>
         </button>
     </header>
 
-    <!-- Running Cards Carousel -->
-    <div class="fixed top-16 inset-x-0 z-30 card-carousel">
+    <!-- Animasi Kartu Berjalan -->
+    <div class="fixed top-16 inset-x-0 z-40 card-carousel border-b dark:border-slate-800">
         <div class="card-track">
-            <!-- First Set -->
-            <div class="info-card flex items-center gap-3">
-                <i class="fas fa-bolt text-reggae-yellow"></i>
-                <div class="text-[10px] font-bold">Respons Super Cepat</div>
-            </div>
-            <div class="info-card flex items-center gap-3">
-                <i class="fas fa-brain text-reggae-green"></i>
-                <div class="text-[10px] font-bold">Akurasi GPT-4o Level</div>
-            </div>
-            <div class="info-card flex items-center gap-3">
-                <i class="fas fa-image text-reggae-red"></i>
-                <div class="text-[10px] font-bold">Bisa Analisis Gambar</div>
-            </div>
-            <div class="info-card flex items-center gap-3">
-                <i class="fas fa-music text-blue-500"></i>
-                <div class="text-[10px] font-bold">Lirik & Musik Reggae</div>
-            </div>
-            <!-- Duplicated for Infinite Scroll -->
-            <div class="info-card flex items-center gap-3">
-                <i class="fas fa-bolt text-reggae-yellow"></i>
-                <div class="text-[10px] font-bold">Respons Super Cepat</div>
-            </div>
-            <div class="info-card flex items-center gap-3">
-                <i class="fas fa-brain text-reggae-green"></i>
-                <div class="text-[10px] font-bold">Akurasi GPT-4o Level</div>
-            </div>
-            <div class="info-card flex items-center gap-3">
-                <i class="fas fa-image text-reggae-red"></i>
-                <div class="text-[10px] font-bold">Bisa Analisis Gambar</div>
-            </div>
+            <div class="info-card"><i class="fas fa-check-circle text-reggae-green"></i> <span class="text-xs font-bold">Akurasi GPT Profesional</span></div>
+            <div class="info-card"><i class="fas fa-image text-reggae-red"></i> <span class="text-xs font-bold">Analisis Gambar Cerdas</span></div>
+            <div class="info-card"><i class="fas fa-bolt text-reggae-yellow"></i> <span class="text-xs font-bold">Respon Kilat 2.5 Flash</span></div>
+            <div class="info-card"><i class="fas fa-code text-blue-500"></i> <span class="text-xs font-bold">Expert Coding Partner</span></div>
+            <div class="info-card"><i class="fas fa-check-circle text-reggae-green"></i> <span class="text-xs font-bold">Akurasi GPT Profesional</span></div>
+            <div class="info-card"><i class="fas fa-image text-reggae-red"></i> <span class="text-xs font-bold">Analisis Gambar Cerdas</span></div>
+            <div class="info-card"><i class="fas fa-bolt text-reggae-yellow"></i> <span class="text-xs font-bold">Respon Kilat 2.5 Flash</span></div>
         </div>
     </div>
 
-    <!-- Chat Space -->
-    <main id="chat-viewport" class="chat-container mt-32 px-4 py-6 space-y-6 overflow-y-auto">
-        <div id="empty-state" class="flex flex-col items-center justify-center min-h-[50vh] text-center space-y-6">
-            <div class="relative w-28 h-28 bg-gradient-to-tr from-green-600 via-yellow-400 to-red-600 rounded-3xl rotate-12 flex items-center justify-center shadow-2xl">
-                <i class="fas fa-robot text-white text-5xl -rotate-12"></i>
+    <!-- Chat Area -->
+    <main id="chat-viewport" class="chat-container mt-36 px-4 py-6 overflow-y-auto space-y-6">
+        <div id="welcome-msg" class="flex flex-col items-center justify-center min-h-[40vh] text-center space-y-4">
+            <div class="w-20 h-20 bg-gradient-to-tr from-green-600 to-red-600 rounded-3xl flex items-center justify-center shadow-xl animate-bounce">
+                <i class="fas fa-robot text-white text-3xl"></i>
             </div>
-            <div class="px-6">
-                <h2 class="text-2xl font-extrabold mb-1">Ada yang bisa Habibi bantu?</h2>
-                <p class="text-sm opacity-50">Tulis kode, kirim foto, atau sekadar sapa santai kawan!</p>
-            </div>
-            <div class="grid grid-cols-2 gap-3 w-full max-w-sm">
-                <button onclick="fastAsk('Tolong jelaskan cara coding Python')" class="p-3 text-[11px] bg-white dark:bg-slate-800 border dark:border-slate-700 rounded-2xl shadow-sm hover:scale-105 transition">Belajar Coding</button>
-                <button onclick="fastAsk('Buatkan puisi tentang pantai kawan')" class="p-3 text-[11px] bg-white dark:bg-slate-800 border dark:border-slate-700 rounded-2xl shadow-sm hover:scale-105 transition">Buat Puisi</button>
+            <div>
+                <h2 class="text-xl font-bold">Halo kawan! Habibi di sini.</h2>
+                <p class="text-sm opacity-60">Apa yang bisa kita kerjakan hari ini?</p>
             </div>
         </div>
     </main>
 
-    <!-- Bottom Interface -->
-    <footer class="fixed bottom-0 inset-x-0 p-4 pb-8 glass-ui border-t dark:border-slate-800 z-40">
-        <div id="file-preview" class="hidden mb-4 p-3 bg-gray-50 dark:bg-slate-800/50 rounded-2xl flex items-center gap-4 border-2 border-dashed border-reggae-yellow animate-pop">
-            <div class="relative w-16 h-16 rounded-xl overflow-hidden shadow-lg">
-                <img id="preview-img" class="w-full h-full object-cover" alt="Preview">
-            </div>
-            <div class="flex-1">
-                <p class="text-[11px] font-extrabold uppercase text-reggae-green">File Gambar Terpilih</p>
-                <p class="text-[10px] opacity-60">Siap dikirim ke habibiDWL AI</p>
-            </div>
-            <button onclick="clearFile()" class="w-10 h-10 bg-reggae-red text-white rounded-full flex items-center justify-center shadow-md active:scale-90">
-                <i class="fas fa-trash-alt"></i>
-            </button>
+    <!-- Input Area -->
+    <footer class="fixed bottom-0 inset-x-0 p-4 pb-8 glass-ui border-t dark:border-slate-800 z-50">
+        <div id="image-preview-box" class="hidden mb-4 p-2 bg-white dark:bg-slate-800 rounded-2xl border-2 border-dashed border-reggae-yellow flex items-center gap-3">
+            <img id="preview-img" class="w-12 h-12 rounded-lg object-cover">
+            <span class="text-xs flex-1 opacity-70 font-bold">Gambar siap dianalisis...</span>
+            <button onclick="removeImage()" class="text-reggae-red p-2 text-xl"><i class="fas fa-times-circle"></i></button>
         </div>
 
-        <div class="max-w-4xl mx-auto flex items-end gap-3">
-            <div class="flex-1 bg-white dark:bg-slate-800 rounded-[28px] border dark:border-slate-700 flex items-end p-1.5 shadow-xl transition-all focus-within:ring-2 ring-reggae-yellow/50">
-                <button onclick="triggerFile()" class="p-3 text-gray-400 hover:text-reggae-green transition-all">
-                    <i class="fas fa-file-image text-xl"></i>
-                </button>
-                <textarea 
-                    id="user-msg" 
-                    rows="1" 
-                    placeholder="Kirim pesan ke Habibi..." 
-                    class="w-full py-3 bg-transparent outline-none resize-none text-sm max-h-40"
-                    oninput="resizeTxt(this)"></textarea>
-                <button onclick="startMic()" id="mic-btn" class="p-3 text-gray-400 hover:text-reggae-red transition-all">
-                    <i class="fas fa-microphone text-xl"></i>
-                </button>
+        <div class="max-w-4xl mx-auto flex items-end gap-2">
+            <div class="flex-1 flex items-end bg-gray-100 dark:bg-slate-800/50 rounded-3xl p-1.5 focus-within:ring-2 ring-reggae-yellow/50 shadow-inner">
+                <button onclick="clickUpload()" class="p-3 text-gray-500 hover:text-reggae-green transition-colors"><i class="fas fa-paperclip text-lg"></i></button>
+                <textarea id="user-input" rows="1" placeholder="Tanya Habibi kawan..." class="w-full py-3 bg-transparent outline-none text-sm resize-none" oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px'"></textarea>
             </div>
-            <button onclick="onSend()" id="send-btn" class="w-14 h-14 rounded-full bg-gradient-to-br from-green-600 to-green-800 text-white shadow-lg flex items-center justify-center text-xl hover:shadow-green-500/40 transition-all active:scale-90">
+            <button onclick="handleSend()" id="send-btn" class="w-14 h-14 bg-reggae-green text-white rounded-full shadow-lg flex items-center justify-center transition-all active:scale-90 hover:shadow-green-500/20">
                 <i class="fas fa-paper-plane"></i>
             </button>
         </div>
-        <p class="text-[9px] text-center mt-3 opacity-30 font-medium">Powered by Gemini 2.5 Flash • Professional Edition</p>
     </footer>
 
-    <input type="file" id="file-input" class="hidden" accept="image/*" onchange="handleFile(event)">
+    <input type="file" id="file-input" class="hidden" accept="image/*" onchange="processFile(event)">
 
     <script>
-        const apiKey = ""; // KUNCI API KOSONG - Lingkungan ini mengisinya otomatis saat dijalankan di Canvas.
-        let currentFile = null;
-        let busy = false;
+        // --- API KEY SUDAH TERPASANG ---
+        const API_KEY = "AIzaSyD4qBKIhgfqxvLQArM1gGCzeEGKVysKSXk"; 
+        // -------------------------------
 
-        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('-translate-x-full'); }
+        let selectedFileBase64 = null;
+        let isProcessing = false;
+
         function toggleDarkMode() { document.documentElement.classList.toggle('dark'); }
-        function resizeTxt(e) { e.style.height = 'auto'; e.style.height = e.scrollHeight + 'px'; }
-        function triggerFile() { document.getElementById('file-input').click(); }
-        function fastAsk(t) { document.getElementById('user-msg').value = t; onSend(); }
+        function clickUpload() { document.getElementById('file-input').click(); }
 
-        function handleFile(e) {
-            const f = e.target.files[0];
-            if (f) {
-                const r = new FileReader();
-                r.onload = (ev) => {
-                    currentFile = ev.target.result.split(',')[1];
+        function processFile(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (ev) => {
+                    selectedFileBase64 = ev.target.result.split(',')[1];
                     document.getElementById('preview-img').src = ev.target.result;
-                    document.getElementById('file-preview').classList.remove('hidden');
+                    document.getElementById('image-preview-box').classList.remove('hidden');
                 };
-                r.readAsDataURL(f);
+                reader.readAsDataURL(file);
             }
         }
 
-        function clearFile() {
-            currentFile = null;
-            document.getElementById('file-input').value = '';
-            document.getElementById('file-preview').classList.add('hidden');
+        function removeImage() {
+            selectedFileBase64 = null;
+            document.getElementById('image-preview-box').classList.add('hidden');
+            document.getElementById('file-input').value = "";
         }
 
-        async function onSend() {
-            const input = document.getElementById('user-msg');
-            const txt = input.value.trim();
-            if ((!txt && !currentFile) || busy) return;
+        async function handleSend() {
+            const inputField = document.getElementById('user-input');
+            const message = inputField.value.trim();
+            if ((!message && !selectedFileBase64) || isProcessing) return;
 
-            const empty = document.getElementById('empty-state');
-            if (empty) empty.remove();
-
-            appendMsg('user', txt, currentFile);
+            document.getElementById('welcome-msg')?.remove();
+            appendMessage('user', message, selectedFileBase64);
             
-            input.value = '';
-            input.style.height = 'auto';
-            const fileToSend = currentFile;
-            clearFile();
+            inputField.value = "";
+            inputField.style.height = "auto";
+            const currentImg = selectedFileBase64;
+            removeImage();
 
-            busy = true;
-            toggleBtn(true);
-            const botId = appendMsg('bot', '', null, true);
+            isProcessing = true;
+            setLoading(true);
+            const botMsgId = appendMessage('bot', '', null, true);
 
             try {
-                // Penanganan Error jika API Key kosong saat dijalankan di luar platform
-                if (apiKey === "" && typeof __app_id === 'undefined') {
-                    throw new Error("API_KEY_MISSING");
-                }
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${API_KEY}`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        contents: [{
+                            parts: [
+                                { text: message || "Halo kawan!" },
+                                ...(currentImg ? [{ inlineData: { mimeType: "image/png", data: currentImg } }] : [])
+                            ]
+                        }],
+                        systemInstruction: {
+                            parts: [{ text: "Nama kamu adalah habibiDWL AI. Kamu asisten profesional dengan gaya bicara santai ala Reggae (kawan, damai, mantap). Kamu sangat ahli dalam coding, matematika, dan analisis. Jawabanmu harus sangat akurat, teknis, dan lengkap." }]
+                        }
+                    })
+                });
 
-                const isDrawing = /gambar|lukis|buatkan foto/i.test(txt) && !fileToSend;
-                if (isDrawing) {
-                    await handleDraw(txt, botId);
-                } else {
-                    await handleChat(txt, fileToSend, botId);
-                }
+                const data = await response.json();
+                if (data.error) throw new Error(data.error.message);
+
+                const botText = data.candidates[0].content.parts[0].text;
+                typeEffect(botMsgId, botText);
+
             } catch (err) {
-                const box = document.getElementById(botId).querySelector('.text-box');
-                if (err.message === "API_KEY_MISSING") {
-                    box.innerHTML = "Waduh kawan, sepertinya kamu belum memasukkan API Key di kodinganmu. AI tidak bisa jalan tanpa kunci gerbang kawan!";
-                } else {
-                    box.innerHTML = "Waduh kawan, koneksi Habibi lagi terganggu. Pastikan internetmu lancar dan coba lagi ya!";
-                }
+                document.getElementById(botMsgId).querySelector('.text-content').innerText = "Waduh kawan, koneksi Habibi terganggu. Tapi tenang, API Key sudah benar, coba cek internet kawan!";
             } finally {
-                busy = false;
-                toggleBtn(false);
+                isProcessing = false;
+                setLoading(false);
             }
         }
 
-        async function handleChat(prompt, img, bId) {
-            const box = document.getElementById(bId).querySelector('.text-box');
-            const payload = {
-                contents: [{
-                    parts: [{ text: prompt || "Halo kawan!" }]
-                }],
-                systemInstruction: {
-                    parts: [{ text: "Nama kamu adalah habibiDWL AI. Kamu adalah AI profesional, cerdas, akurat, dan sangat membantu. Gaya bicaramu santai seperti budaya reggae (gunakan kata kawan, damai, dll) tapi tetap memberikan jawaban teknis yang sangat tepat dan benar. Jika user bertanya tentang coding atau pengetahuan umum, berikan jawaban selevel ChatGPT Pro." }]
-                }
-            };
-
-            if (img) {
-                payload.contents[0].parts.push({
-                    inlineData: { mimeType: "image/png", data: img }
-                });
-            }
-
-            const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
-
-            if (!res.ok) throw new Error("API_ERROR");
-
-            const data = await res.json();
-            const responseText = data.candidates?.[0]?.content?.parts?.[0]?.text || "Maaf kawan, aku terdiam sejenak.";
-            
+        function typeEffect(id, text) {
+            const box = document.getElementById(id).querySelector('.text-content');
             box.innerHTML = "";
             let i = 0;
-            const timer = setInterval(() => {
-                if (i < responseText.length) {
-                    box.innerHTML += responseText[i];
+            const interval = setInterval(() => {
+                if (i < text.length) {
+                    box.innerHTML += text[i];
                     i++;
-                    document.getElementById('chat-viewport').scrollTop = document.getElementById('chat-viewport').scrollHeight;
+                    const vp = document.getElementById('chat-viewport');
+                    vp.scrollTop = vp.scrollHeight;
                 } else {
-                    clearInterval(timer);
+                    clearInterval(interval);
                 }
-            }, 10);
+            }, 5);
         }
 
-        async function handleDraw(prompt, bId) {
-            const box = document.getElementById(bId).querySelector('.text-box');
-            box.innerHTML = `<p class="italic opacity-60 text-xs">Menyiapkan kanvas dan cat warna kawan...</p><div class="w-full h-48 bg-gray-200 dark:bg-slate-800 rounded-2xl animate-pulse mt-2"></div>`;
-            
-            const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-generate-001:predict?key=${apiKey}`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ instances: { prompt: prompt }, parameters: { sampleCount: 1 } })
-            });
-
-            if (!res.ok) throw new Error("DRAW_ERROR");
-
-            const data = await res.json();
-            const url = `data:image/png;base64,${data.predictions[0].bytesBase64Encoded}`;
-            box.innerHTML = `
-                <div class="space-y-3">
-                    <img src="${url}" class="w-full rounded-2xl shadow-xl border-4 border-white dark:border-slate-700" alt="Generated Art">
-                    <div class="flex justify-between items-center px-1">
-                        <span class="text-[10px] font-bold opacity-50 italic">Lukisan Habibi kawan</span>
-                        <a href="${url}" download="habibi-art.png" class="text-xs text-reggae-green font-bold uppercase"><i class="fas fa-save"></i> Simpan</a>
-                    </div>
-                </div>`;
-        }
-
-        function appendMsg(role, txt, img, loading = false) {
+        function appendMessage(role, text, img, isLoading = false) {
             const vp = document.getElementById('chat-viewport');
-            const id = 'm-' + Date.now();
-            const wrap = document.createElement('div');
-            wrap.id = id;
-            wrap.className = `flex ${role === 'user' ? 'justify-end' : 'justify-start'} animate-pop`;
-
-            wrap.innerHTML = `
-                <div class="max-w-[85%] ${role === 'user' ? 'bg-gradient-to-r from-green-700 to-green-600 text-white rounded-[24px] rounded-tr-none shadow-md' : 'bg-white dark:bg-slate-800 border dark:border-slate-700 rounded-[24px] rounded-tl-none shadow-sm'} p-4">
-                    ${img ? `<img src="data:image/png;base64,${img}" class="w-full h-auto rounded-xl mb-3 border border-black/5" alt="Uploaded">` : ''}
-                    <div class="text-box text-sm leading-relaxed whitespace-pre-wrap">${loading ? '<div class="flex gap-1 py-1"><div class="typing-dot bg-reggae-green"></div><div class="typing-dot bg-reggae-yellow" style="animation-delay:0.2s"></div><div class="typing-dot bg-reggae-red" style="animation-delay:0.4s"></div></div>' : txt}</div>
+            const id = 'msg-' + Date.now();
+            const div = document.createElement('div');
+            div.id = id;
+            div.className = `flex ${role === 'user' ? 'justify-end' : 'justify-start'} animate-pop`;
+            div.innerHTML = `
+                <div class="max-w-[85%] p-4 rounded-2xl ${role === 'user' ? 'bg-reggae-green text-white rounded-tr-none shadow-md' : 'bg-white dark:bg-slate-800 border dark:border-slate-700 rounded-tl-none shadow-sm'}">
+                    ${img ? `<img src="data:image/png;base64,${img}" class="w-full h-auto rounded-lg mb-2">` : ''}
+                    <div class="text-content text-sm leading-relaxed whitespace-pre-wrap font-medium">${isLoading ? '<div class="flex gap-1 py-1"><div class="typing-dot bg-reggae-green"></div><div class="typing-dot bg-reggae-yellow" style="animation-delay:0.2s"></div><div class="typing-dot bg-reggae-red" style="animation-delay:0.4s"></div></div>' : text}</div>
                 </div>
             `;
-            vp.appendChild(wrap);
-            vp.scrollTo(0, vp.scrollHeight);
+            vp.appendChild(div);
+            vp.scrollTop = vp.scrollHeight;
             return id;
         }
 
-        function toggleBtn(l) {
-            const b = document.getElementById('send-btn');
-            b.innerHTML = l ? '<i class="fas fa-circle-notch fa-spin"></i>' : '<i class="fas fa-paper-plane"></i>';
-            b.disabled = l;
+        function setLoading(l) {
+            const btn = document.getElementById('send-btn');
+            btn.innerHTML = l ? '<i class="fas fa-spinner fa-spin"></i>' : '<i class="fas fa-paper-plane"></i>';
+            btn.disabled = l;
         }
 
-        function startMic() {
-            const m = document.getElementById('mic-btn');
-            m.classList.add('text-reggae-red', 'pulse-red');
-            setTimeout(() => { m.classList.remove('text-reggae-red', 'pulse-red'); }, 3000);
-        }
-
-        document.getElementById('user-msg').addEventListener('keydown', (e) => {
+        document.getElementById('user-input').addEventListener('keydown', (e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
-                onSend();
+                handleSend();
             }
         });
     </script>
