@@ -61,7 +61,7 @@
         }
 
         .chat-container {
-            height: calc(100vh - 240px); /* Adjusted for carousel */
+            height: calc(100vh - 240px);
             scroll-behavior: smooth;
         }
 
@@ -72,7 +72,6 @@
             font-weight: 800;
         }
 
-        /* Message Bubbles */
         .animate-pop {
             animation: popMsg 0.4s cubic-bezier(0.26, 1.36, 0.4, 1) forwards;
         }
@@ -102,7 +101,6 @@
             background: rgba(15, 23, 42, 0.9);
         }
 
-        /* Pulse for Voice */
         .pulse-red {
             box-shadow: 0 0 0 0 rgba(183, 28, 28, 0.7);
             animation: pulse-red 2s infinite;
@@ -135,7 +133,7 @@
 
             <div class="flex-1 overflow-y-auto space-y-3" id="history">
                 <p class="text-[10px] uppercase font-bold text-gray-400 px-2">Percakapan Terakhir</p>
-                <!-- History Items can go here -->
+                <div class="p-3 text-xs opacity-50 italic">Belum ada riwayat kawan...</div>
             </div>
 
             <div class="mt-auto pt-4 border-t dark:border-slate-800">
@@ -222,10 +220,9 @@
 
     <!-- Bottom Interface -->
     <footer class="fixed bottom-0 inset-x-0 p-4 pb-8 glass-ui border-t dark:border-slate-800 z-40">
-        <!-- File Preview -->
         <div id="file-preview" class="hidden mb-4 p-3 bg-gray-50 dark:bg-slate-800/50 rounded-2xl flex items-center gap-4 border-2 border-dashed border-reggae-yellow animate-pop">
             <div class="relative w-16 h-16 rounded-xl overflow-hidden shadow-lg">
-                <img id="preview-img" class="w-full h-full object-cover">
+                <img id="preview-img" class="w-full h-full object-cover" alt="Preview">
             </div>
             <div class="flex-1">
                 <p class="text-[11px] font-extrabold uppercase text-reggae-green">File Gambar Terpilih</p>
@@ -261,11 +258,10 @@
     <input type="file" id="file-input" class="hidden" accept="image/*" onchange="handleFile(event)">
 
     <script>
-        const apiKey = "";
+        const apiKey = ""; // KUNCI API KOSONG - Lingkungan ini mengisinya otomatis saat dijalankan di Canvas.
         let currentFile = null;
         let busy = false;
 
-        // UI
         function toggleSidebar() { document.getElementById('sidebar').classList.toggle('-translate-x-full'); }
         function toggleDarkMode() { document.documentElement.classList.toggle('dark'); }
         function resizeTxt(e) { e.style.height = 'auto'; e.style.height = e.scrollHeight + 'px'; }
@@ -291,7 +287,6 @@
             document.getElementById('file-preview').classList.add('hidden');
         }
 
-        // Logic
         async function onSend() {
             const input = document.getElementById('user-msg');
             const txt = input.value.trim();
@@ -312,6 +307,11 @@
             const botId = appendMsg('bot', '', null, true);
 
             try {
+                // Penanganan Error jika API Key kosong saat dijalankan di luar platform
+                if (apiKey === "" && typeof __app_id === 'undefined') {
+                    throw new Error("API_KEY_MISSING");
+                }
+
                 const isDrawing = /gambar|lukis|buatkan foto/i.test(txt) && !fileToSend;
                 if (isDrawing) {
                     await handleDraw(txt, botId);
@@ -319,7 +319,12 @@
                     await handleChat(txt, fileToSend, botId);
                 }
             } catch (err) {
-                document.getElementById(botId).querySelector('.text-box').innerHTML = "Waduh kawan, koneksi Habibi lagi terganggu. Coba sebentar lagi ya!";
+                const box = document.getElementById(botId).querySelector('.text-box');
+                if (err.message === "API_KEY_MISSING") {
+                    box.innerHTML = "Waduh kawan, sepertinya kamu belum memasukkan API Key di kodinganmu. AI tidak bisa jalan tanpa kunci gerbang kawan!";
+                } else {
+                    box.innerHTML = "Waduh kawan, koneksi Habibi lagi terganggu. Pastikan internetmu lancar dan coba lagi ya!";
+                }
             } finally {
                 busy = false;
                 toggleBtn(false);
@@ -330,14 +335,18 @@
             const box = document.getElementById(bId).querySelector('.text-box');
             const payload = {
                 contents: [{
-                    parts: [{ text: prompt || "Tolong bantu saya kawan." }]
+                    parts: [{ text: prompt || "Halo kawan!" }]
                 }],
                 systemInstruction: {
                     parts: [{ text: "Nama kamu adalah habibiDWL AI. Kamu adalah AI profesional, cerdas, akurat, dan sangat membantu. Gaya bicaramu santai seperti budaya reggae (gunakan kata kawan, damai, dll) tapi tetap memberikan jawaban teknis yang sangat tepat dan benar. Jika user bertanya tentang coding atau pengetahuan umum, berikan jawaban selevel ChatGPT Pro." }]
                 }
             };
 
-            if (img) payload.contents[0].parts.push({ inlineData: { mimeType: "image/png", data: img } });
+            if (img) {
+                payload.contents[0].parts.push({
+                    inlineData: { mimeType: "image/png", data: img }
+                });
+            }
 
             const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
                 method: 'POST',
@@ -345,41 +354,46 @@
                 body: JSON.stringify(payload)
             });
 
+            if (!res.ok) throw new Error("API_ERROR");
+
             const data = await res.json();
-            const text = data.candidates?.[0]?.content?.parts?.[0]?.text || "Maaf kawan, aku terdiam sejenak.";
+            const responseText = data.candidates?.[0]?.content?.parts?.[0]?.text || "Maaf kawan, aku terdiam sejenak.";
             
             box.innerHTML = "";
             let i = 0;
             const timer = setInterval(() => {
-                box.innerHTML += text[i];
-                i++;
-                if (i >= text.length) {
-                    clearInterval(timer);
+                if (i < responseText.length) {
+                    box.innerHTML += responseText[i];
+                    i++;
                     document.getElementById('chat-viewport').scrollTop = document.getElementById('chat-viewport').scrollHeight;
+                } else {
+                    clearInterval(timer);
                 }
             }, 10);
         }
 
         async function handleDraw(prompt, bId) {
             const box = document.getElementById(bId).querySelector('.text-box');
-            box.innerHTML = `<p class="italic opacity-60 text-xs">Menyiapkan kanvas dan cat warna...</p><div class="w-full h-48 bg-gray-200 dark:bg-slate-800 rounded-2xl animate-pulse mt-2"></div>`;
+            box.innerHTML = `<p class="italic opacity-60 text-xs">Menyiapkan kanvas dan cat warna kawan...</p><div class="w-full h-48 bg-gray-200 dark:bg-slate-800 rounded-2xl animate-pulse mt-2"></div>`;
             
-            try {
-                const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-generate-001:predict?key=${apiKey}`, {
-                    method: 'POST',
-                    body: JSON.stringify({ instances: { prompt: prompt }, parameters: { sampleCount: 1 } })
-                });
-                const data = await res.json();
-                const url = `data:image/png;base64,${data.predictions[0].bytesBase64Encoded}`;
-                box.innerHTML = `
-                    <div class="space-y-3">
-                        <img src="${url}" class="w-full rounded-2xl shadow-xl border-4 border-white dark:border-slate-700">
-                        <div class="flex justify-between items-center px-1">
-                            <span class="text-[10px] font-bold opacity-50 italic">Lukisan Habibi kawan</span>
-                            <a href="${url}" download="habibi-art.png" class="text-xs text-reggae-green font-bold uppercase"><i class="fas fa-save"></i> Simpan</a>
-                        </div>
-                    </div>`;
-            } catch (e) { box.innerHTML = "Gagal melukis kawan, kuasnya hilang!"; }
+            const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-generate-001:predict?key=${apiKey}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ instances: { prompt: prompt }, parameters: { sampleCount: 1 } })
+            });
+
+            if (!res.ok) throw new Error("DRAW_ERROR");
+
+            const data = await res.json();
+            const url = `data:image/png;base64,${data.predictions[0].bytesBase64Encoded}`;
+            box.innerHTML = `
+                <div class="space-y-3">
+                    <img src="${url}" class="w-full rounded-2xl shadow-xl border-4 border-white dark:border-slate-700" alt="Generated Art">
+                    <div class="flex justify-between items-center px-1">
+                        <span class="text-[10px] font-bold opacity-50 italic">Lukisan Habibi kawan</span>
+                        <a href="${url}" download="habibi-art.png" class="text-xs text-reggae-green font-bold uppercase"><i class="fas fa-save"></i> Simpan</a>
+                    </div>
+                </div>`;
         }
 
         function appendMsg(role, txt, img, loading = false) {
@@ -391,12 +405,12 @@
 
             wrap.innerHTML = `
                 <div class="max-w-[85%] ${role === 'user' ? 'bg-gradient-to-r from-green-700 to-green-600 text-white rounded-[24px] rounded-tr-none shadow-md' : 'bg-white dark:bg-slate-800 border dark:border-slate-700 rounded-[24px] rounded-tl-none shadow-sm'} p-4">
-                    ${img ? `<img src="data:image/png;base64,${img}" class="w-full h-auto rounded-xl mb-3 border border-black/5">` : ''}
+                    ${img ? `<img src="data:image/png;base64,${img}" class="w-full h-auto rounded-xl mb-3 border border-black/5" alt="Uploaded">` : ''}
                     <div class="text-box text-sm leading-relaxed whitespace-pre-wrap">${loading ? '<div class="flex gap-1 py-1"><div class="typing-dot bg-reggae-green"></div><div class="typing-dot bg-reggae-yellow" style="animation-delay:0.2s"></div><div class="typing-dot bg-reggae-red" style="animation-delay:0.4s"></div></div>' : txt}</div>
                 </div>
             `;
             vp.appendChild(wrap);
-            vp.scrollTop = vp.scrollHeight;
+            vp.scrollTo(0, vp.scrollHeight);
             return id;
         }
 
