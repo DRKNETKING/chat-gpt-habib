@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>habibiDWL AI - Tarim 2026</title>
+    <title>habibiDWL AI - Maintenance 2026</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -12,8 +12,8 @@
         :root {
             --tarim-brown: #a67c52;
             --tarim-sand: #e3c39d;
-            --dark-deep: #1a1612;
-            --clay-bg: #2d241e;
+            --dark-deep: #0f0d0b;
+            --clay-bg: #1e1814;
         }
 
         body {
@@ -33,7 +33,7 @@
             height: 100%;
             pointer-events: none;
             z-index: 5;
-            opacity: 0.6; /* Dibuat sedikit transparan agar nuansa kota tetap terlihat */
+            opacity: 0.4;
         }
 
         /* Tarim Skyline Background */
@@ -52,82 +52,115 @@
             position: absolute;
             bottom: 0;
             width: 100%;
-            height: 150px;
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 200" preserveAspectRatio="none"><path d="M0,200 L0,150 L30,150 L30,120 L60,120 L60,150 L100,150 L100,80 L130,80 L130,50 L160,50 L160,80 L190,80 L190,150 L250,150 L250,100 L300,100 L300,150 L350,150 L350,40 L380,40 L380,10 L410,40 L440,40 L440,150 L500,150 L500,90 L550,90 L550,150 L620,150 L620,70 L650,70 L650,40 L680,70 L710,70 L710,150 L780,150 L780,110 L830,110 L830,150 L900,150 L900,60 L930,60 L930,30 L960,60 L990,60 L1000,60 L1000,200 Z" fill="%232d241e"/></svg>');
+            height: 120px;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 200" preserveAspectRatio="none"><path d="M0,200 L0,150 L30,150 L30,120 L60,120 L60,150 L100,150 L100,80 L130,80 L130,50 L160,50 L160,80 L190,80 L190,150 L250,150 L250,100 L300,100 L300,150 L350,150 L350,40 L380,40 L380,10 L410,40 L440,40 L440,150 L500,150 L500,90 L550,90 L550,150 L620,150 L620,70 L650,70 L650,40 L680,70 L710,70 L710,150 L780,150 L780,110 L830,110 L830,150 L900,150 L900,60 L930,60 L930,30 L960,60 L990,60 L1000,60 L1000,200 Z" fill="%231e1814"/></svg>');
             background-size: 100% 100%;
-            opacity: 0.8;
+            opacity: 0.6;
         }
 
         .glass-header {
-            background: rgba(26, 22, 18, 0.85);
+            background: rgba(15, 13, 11, 0.8);
             backdrop-filter: blur(15px);
             -webkit-backdrop-filter: blur(15px);
             border-bottom: 1px solid rgba(166, 124, 82, 0.2);
         }
 
-        .chat-container {
-            height: calc(100vh - 240px);
-            scroll-behavior: smooth;
-            overflow-y: auto;
+        .maintenance-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: calc(100vh - 160px);
+            text-align: center;
             position: relative;
-            z-index: 10;
-            padding-bottom: 100px;
+            z-index: 20;
+            padding: 20px;
         }
 
-        .message-bubble {
-            max-width: 85%;
-            padding: 14px 18px;
-            border-radius: 20px;
-            font-size: 0.925rem;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            animation: bubbleIn 0.3s cubic-bezier(0.1, 0.9, 0.2, 1) forwards;
-        }
-
-        @keyframes bubbleIn {
-            from { opacity: 0; transform: scale(0.9) translateY(10px); }
-            to { opacity: 1; transform: scale(1) translateY(0); }
-        }
-
-        .user-bubble {
-            background: linear-gradient(135deg, #a67c52, #7a5a3a);
-            color: white;
-            border-bottom-right-radius: 4px;
-        }
-
-        .bot-bubble {
-            background: #2d241e;
-            color: #e3c39d;
-            border: 1px solid rgba(166, 124, 82, 0.2);
-            border-bottom-left-radius: 4px;
-        }
-
-        .input-area {
-            background: rgba(26, 22, 18, 0.95);
+        .maintenance-card {
+            background: rgba(30, 24, 20, 0.6);
             backdrop-filter: blur(20px);
-            border-top: 1px solid rgba(166, 124, 82, 0.2);
-            position: relative;
-            z-index: 50;
+            border: 1px solid rgba(166, 124, 82, 0.3);
+            border-radius: 32px;
+            padding: 40px 30px;
+            max-width: 400px;
+            width: 100%;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
         }
 
-        .tarim-badge {
-            background: #a67c52;
-            color: #1a1612;
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 10px;
-            font-weight: 800;
+        .server-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(245, 158, 11, 0.1);
+            color: #f59e0b;
+            padding: 6px 16px;
+            border-radius: 100px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 24px;
+            border: 1px solid rgba(245, 158, 11, 0.2);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #f59e0b;
+            border-radius: 50%;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(245, 158, 11, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
+        }
+
+        .maintenance-title {
+            font-size: 32px;
+            font-weight: 900;
+            color: #fff;
+            line-height: 1.1;
+            margin-bottom: 12px;
+            letter-spacing: -1px;
+        }
+
+        .maintenance-subtitle {
+            font-size: 14px;
+            color: #a67c52;
+            margin-bottom: 30px;
+        }
+
+        .progress-bar-bg {
+            width: 100%;
+            height: 6px;
+            background: rgba(166, 124, 82, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            width: 65%;
+            background: linear-gradient(90deg, #a67c52, #f59e0b);
+            border-radius: 10px;
+            transition: width 1s ease-in-out;
         }
 
         .arabic-font {
             font-family: 'Amiri', serif;
         }
 
-        /* Pulse animation for the city glow */
-        @keyframes cityGlow {
-            0%, 100% { filter: drop-shadow(0 0 5px rgba(166, 124, 82, 0.3)); }
-            50% { filter: drop-shadow(0 0 15px rgba(166, 124, 82, 0.5)); }
+        .input-area-disabled {
+            background: rgba(15, 13, 11, 0.9);
+            border-top: 1px solid rgba(166, 124, 82, 0.1);
+            filter: grayscale(1);
+            opacity: 0.5;
+            pointer-events: none;
         }
-        .glow-effect { animation: cityGlow 4s infinite; }
     </style>
 </head>
 <body>
@@ -141,58 +174,66 @@
     <header class="fixed top-0 inset-x-0 h-16 z-50 glass-header flex items-center justify-between px-6">
         <div class="flex items-center gap-3">
             <div class="w-9 h-9 rounded-xl bg-amber-900/30 flex items-center justify-center border border-amber-700/30">
-                <i class="fas fa-mosque text-amber-500 text-sm"></i>
+                <i class="fas fa-cog fa-spin text-amber-500 text-sm"></i>
             </div>
             <div>
                 <h1 class="text-amber-200 text-lg font-black tracking-tight">habibiDWL AI</h1>
                 <div class="flex items-center gap-2">
-                    <span class="text-[8px] uppercase tracking-widest text-amber-600 font-bold">Tarim Edition</span>
-                    <span class="tarim-badge">2026</span>
+                    <span class="text-[8px] uppercase tracking-widest text-amber-600 font-bold">System Status</span>
+                    <span class="bg-amber-600 text-black px-2 py-0.5 rounded font-black text-[10px]">2026</span>
                 </div>
             </div>
         </div>
         <div class="arabic-font text-amber-600/60 text-lg">تريم الغناء</div>
     </header>
 
-    <main id="chat-viewport" class="chat-container mt-20 px-4 py-6 space-y-6">
-        <div id="welcome-msg" class="flex flex-col items-center justify-center min-h-[55vh] text-center space-y-6 px-10">
-            <div class="relative glow-effect">
-                <div class="absolute inset-0 bg-amber-600 blur-3xl opacity-20"></div>
-                <div class="w-24 h-24 bg-amber-900/20 rounded-[2.5rem] flex items-center justify-center border border-amber-600/30 relative z-10 shadow-2xl">
-                    <i class="fas fa-moon text-amber-400 text-4xl"></i>
+    <main class="maintenance-container mt-16">
+        <div class="maintenance-card">
+            <div class="server-status">
+                <div class="status-dot"></div>
+                Maintenance
+            </div>
+            
+            <div class="mb-6">
+                <!-- Image Placeholder for Tarim AI Maintenance -->
+                <div class="w-20 h-20 mx-auto bg-amber-900/20 rounded-full flex items-center justify-center border border-amber-600/30 shadow-inner">
+                    <i class="fas fa-tools text-3xl text-amber-500"></i>
                 </div>
             </div>
-            <div class="space-y-2">
-                <h2 class="text-2xl font-black text-amber-100 italic tracking-tighter">HADRAMAUT 2026</h2>
-                <p class="text-[11px] text-amber-600/80 uppercase font-bold tracking-[0.3em]">Mubarak Al-Aam Al-Jadid</p>
-                <p class="text-xs text-amber-200/60 leading-relaxed max-w-xs mx-auto">Selamat Tahun Baru 2026 kawan. Nuansa Kota Tarim yang tenang menyertai setiap diskusi kita di sini.</p>
+
+            <h2 class="maintenance-title">AI MAINTENANCE SERVER</h2>
+            <p class="maintenance-subtitle italic">Meningkatkan sistem untuk lebih baik.</p>
+            
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill"></div>
+            </div>
+            <div class="flex justify-between text-[10px] font-bold text-amber-700 uppercase tracking-tighter">
+                <span>Optimizing Core</span>
+                <span>65% Done</span>
+            </div>
+
+            <div class="mt-8 pt-6 border-t border-amber-900/30">
+                <p class="text-[11px] text-amber-200/50 leading-relaxed">
+                    Mohon tunggu sejenak kawan, server sedang dalam sinkronisasi data Kota Tarim. Fitur chat akan segera kembali normal.
+                </p>
             </div>
         </div>
     </main>
 
-    <footer class="fixed bottom-0 inset-x-0 input-area p-4 pb-10">
-        <div id="image-preview-box" class="hidden mb-4 p-2 bg-amber-900/20 rounded-xl border border-amber-600/20 flex items-center gap-3">
-            <img id="preview-img" class="w-10 h-10 rounded-lg object-cover">
-            <button onclick="removeImage()" class="text-amber-500 p-2"><i class="fas fa-times"></i></button>
-        </div>
-
+    <footer class="fixed bottom-0 inset-x-0 input-area-disabled p-4 pb-10 z-50">
         <div class="max-w-3xl mx-auto flex items-end gap-3">
-            <div class="flex-1 flex items-end bg-amber-950/20 rounded-2xl p-1 border border-amber-600/20 focus-within:border-amber-500/50 transition-all">
-                <button onclick="clickUpload()" class="p-3.5 text-amber-700 hover:text-amber-500 transition-colors">
-                    <i class="fas fa-paperclip text-lg"></i>
-                </button>
-                <textarea id="user-input" rows="1" placeholder="Ketik pesan..." class="w-full py-3.5 bg-transparent outline-none text-sm text-amber-100 placeholder-amber-800 resize-none" oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px'"></textarea>
+            <div class="flex-1 flex items-end bg-amber-950/20 rounded-2xl p-1 border border-amber-600/20">
+                <button class="p-3.5 text-amber-700"><i class="fas fa-paperclip text-lg"></i></button>
+                <textarea disabled placeholder="Server Sedang Maintenance..." class="w-full py-3.5 bg-transparent outline-none text-sm text-amber-800 resize-none"></textarea>
             </div>
-            <button onclick="handleSend()" id="send-btn" class="w-12 h-12 bg-amber-700 hover:bg-amber-600 text-amber-100 rounded-xl flex items-center justify-center shadow-lg active:scale-95 transition-all">
-                <i class="fas fa-chevron-right"></i>
+            <button disabled class="w-12 h-12 bg-amber-900 text-amber-100 rounded-xl flex items-center justify-center">
+                <i class="fas fa-lock"></i>
             </button>
         </div>
     </footer>
 
-    <input type="file" id="file-input" class="hidden" accept="image/*" onchange="processFile(event)">
-
     <script>
-        // API SECURITY - Fragmented & Protected
+        // API SECURITY - Secured Structure
         const _SECRET_PROVIDER = (() => {
             const _p = ["SyD4qBKI", "AIza", "hgfqxvLQA", "rM1gGCz", "eEGKVysKSXk"];
             return {
@@ -201,7 +242,7 @@
             };
         })();
 
-        // OPTIMIZED FIREWORKS ENGINE (Silent & Smooth)
+        // OPTIMIZED FIREWORKS ENGINE (Running in Background during Maintenance)
         const canvas = document.getElementById('fw-canvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
@@ -218,21 +259,21 @@
                 this.x = x;
                 this.y = y;
                 this.color = color;
-                const speed = window.innerWidth < 600 ? 4 : 6;
+                const speed = window.innerWidth < 600 ? 3 : 5;
                 this.velocity = {
                     x: (Math.random() - 0.5) * speed,
                     y: (Math.random() - 0.5) * speed
                 };
                 this.alpha = 1;
                 this.friction = 0.98;
-                this.gravity = 0.08;
+                this.gravity = 0.05;
             }
 
             draw() {
                 ctx.save();
                 ctx.globalAlpha = this.alpha;
                 ctx.beginPath();
-                ctx.arc(this.x, this.y, 1, 0, Math.PI * 2);
+                ctx.arc(this.x, this.y, 0.8, 0, Math.PI * 2);
                 ctx.fillStyle = this.color;
                 ctx.fill();
                 ctx.restore();
@@ -244,30 +285,30 @@
                 this.velocity.y += this.gravity;
                 this.x += this.velocity.x;
                 this.y += this.velocity.y;
-                this.alpha -= 0.01;
+                this.alpha -= 0.008;
             }
         }
 
         function createBurst(x, y) {
-            const colors = ['#fde68a', '#f59e0b', '#d97706', '#ffffff', '#78350f'];
+            const colors = ['#fde68a', '#f59e0b', '#d97706', '#78350f'];
             const color = colors[Math.floor(Math.random() * colors.length)];
-            const count = window.innerWidth < 600 ? 20 : 35;
+            const count = window.innerWidth < 600 ? 15 : 25;
             for (let i = 0; i < count; i++) {
                 particles.push(new Particle(x, y, color));
             }
         }
 
         function autoFire() {
-            if (Math.random() > 0.3) {
+            if (Math.random() > 0.4) {
                 const x = Math.random() * canvas.width;
-                const y = Math.random() * (canvas.height * 0.3) + 50; 
+                const y = Math.random() * (canvas.height * 0.4) + 50; 
                 createBurst(x, y);
             }
-            setTimeout(autoFire, Math.random() * 2500 + 1500);
+            setTimeout(autoFire, Math.random() * 3000 + 2000);
         }
 
         function animate() {
-            ctx.fillStyle = 'rgba(26, 22, 18, 0.2)';
+            ctx.fillStyle = 'rgba(15, 13, 11, 0.2)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             
             for (let i = particles.length - 1; i >= 0; i--) {
@@ -284,122 +325,6 @@
 
         animate();
         autoFire();
-
-        // CHAT LOGIC
-        let selectedFileBase64 = null;
-        let isProcessing = false;
-
-        function clickUpload() { document.getElementById('file-input').click(); }
-
-        function processFile(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = (ev) => {
-                    selectedFileBase64 = ev.target.result.split(',')[1];
-                    document.getElementById('preview-img').src = ev.target.result;
-                    document.getElementById('image-preview-box').classList.remove('hidden');
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-
-        function removeImage() {
-            selectedFileBase64 = null;
-            document.getElementById('image-preview-box').classList.add('hidden');
-        }
-
-        async function handleSend() {
-            const inputField = document.getElementById('user-input');
-            const message = inputField.value.trim();
-            if ((!message && !selectedFileBase64) || isProcessing) return;
-
-            document.getElementById('welcome-msg')?.remove();
-            appendMessage('user', message, selectedFileBase64);
-            
-            inputField.value = "";
-            inputField.style.height = "auto";
-            const currentImg = selectedFileBase64;
-            removeImage();
-
-            isProcessing = true;
-            setLoading(true);
-            const botMsgId = appendMessage('bot', '', null, true);
-
-            try {
-                const response = await fetch(`${_SECRET_PROVIDER._gateway()}?key=${_SECRET_PROVIDER._token()}`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        contents: [{
-                            parts: [
-                                { text: message || "Assalamu'alaikum" },
-                                ...(currentImg ? [{ inlineData: { mimeType: "image/png", data: currentImg } }] : [])
-                            ]
-                        }],
-                        systemInstruction: {
-                            parts: [{ text: "Nama kamu habibiDWL AI. Kamu asisten yang sangat sopan, bijak, dan tenang dengan nuansa Kota Tarim. Berikan jawaban yang cerdas, padat, dan menyejukkan." }]
-                        }
-                    })
-                });
-
-                const data = await response.json();
-                const botText = data.candidates[0].content.parts[0].text;
-                typeEffect(botMsgId, botText);
-
-            } catch (err) {
-                document.getElementById(botMsgId).querySelector('.text-content').innerText = "Mohon maaf kawan, ada kendala koneksi. Coba lagi ya.";
-            } finally {
-                isProcessing = false;
-                setLoading(false);
-            }
-        }
-
-        function typeEffect(id, text) {
-            const box = document.getElementById(id).querySelector('.text-content');
-            box.innerHTML = "";
-            let i = 0;
-            const interval = setInterval(() => {
-                if (i < text.length) {
-                    box.innerHTML += text[i];
-                    i++;
-                    const vp = document.getElementById('chat-viewport');
-                    vp.scrollTop = vp.scrollHeight;
-                } else {
-                    clearInterval(interval);
-                }
-            }, 8);
-        }
-
-        function appendMessage(role, text, img, isLoading = false) {
-            const vp = document.getElementById('chat-viewport');
-            const id = 'msg-' + Date.now();
-            const div = document.createElement('div');
-            div.id = id;
-            div.className = `flex ${role === 'user' ? 'justify-end' : 'justify-start'} relative z-10`;
-            div.innerHTML = `
-                <div class="message-bubble ${role === 'user' ? 'user-bubble' : 'bot-bubble'}">
-                    ${img ? `<img src="data:image/png;base64,${img}" class="max-w-xs h-auto rounded-lg mb-3 border border-amber-600/20">` : ''}
-                    <div class="text-content whitespace-pre-wrap font-medium">${isLoading ? '<div class="flex gap-1.5 py-1.5"><div class="w-1.5 h-1.5 bg-amber-600 rounded-full animate-bounce"></div><div class="w-1.5 h-1.5 bg-amber-600 rounded-full animate-bounce" style="animation-delay:0.2s"></div><div class="w-1.5 h-1.5 bg-amber-600 rounded-full animate-bounce" style="animation-delay:0.4s"></div></div>' : text}</div>
-                </div>
-            `;
-            vp.appendChild(div);
-            setTimeout(() => { vp.scrollTop = vp.scrollHeight; }, 30);
-            return id;
-        }
-
-        function setLoading(l) {
-            const btn = document.getElementById('send-btn');
-            btn.innerHTML = l ? '<i class="fas fa-spinner fa-spin"></i>' : '<i class="fas fa-chevron-right"></i>';
-            btn.disabled = l;
-        }
-
-        document.getElementById('user-input').addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                handleSend();
-            }
-        });
     </script>
 </body>
 </html>
