@@ -3,152 +3,168 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>habibiDWL AI - Professional Reggae Experience</title>
+    <title>habibiDWL AI - New Year 2026 Auto</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
         
         :root {
-            --reggae-green: #1b5e20;
-            --reggae-yellow: #fbc02d;
-            --reggae-red: #b71c1c;
+            --reggae-green: #2e7d32;
+            --reggae-yellow: #f9a825;
+            --reggae-red: #c62828;
+            --dark-bg: #0b0f1a;
         }
 
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: #f8fafc;
-            overflow-x: hidden;
-        }
-
-        .dark body { background-color: #020617; }
-
-        .card-carousel {
-            display: flex;
+            background-color: var(--dark-bg);
+            color: #f1f5f9;
             overflow: hidden;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Canvas Background */
+        #fw-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
-            padding: 12px 0;
-            background: rgba(255, 255, 255, 0.6);
-            backdrop-filter: blur(5px);
-        }
-        .dark .card-carousel { background: rgba(15, 23, 42, 0.6); }
-
-        .card-track {
-            display: flex;
-            gap: 15px;
-            animation: scrollCards 30s linear infinite;
+            height: 100%;
+            pointer-events: none;
+            z-index: 5;
         }
 
-        @keyframes scrollCards {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
+        .glass-header {
+            background: rgba(11, 15, 26, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
-
-        .info-card {
-            flex: 0 0 220px;
-            padding: 12px 16px;
-            border-radius: 20px;
-            background: white;
-            border: 1px solid #e2e8f0;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .dark .info-card { background: #1e293b; border-color: #334155; }
 
         .reggae-gradient-text {
-            background: linear-gradient(90deg, var(--reggae-green), var(--reggae-yellow), var(--reggae-red));
+            background: linear-gradient(90deg, #4ade80, #facc15, #f87171);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             font-weight: 800;
         }
 
         .chat-container {
-            height: calc(100vh - 260px);
+            height: calc(100vh - 240px);
             scroll-behavior: smooth;
+            overflow-y: auto;
+            position: relative;
+            z-index: 10;
         }
 
-        .glass-ui {
-            background: rgba(255, 255, 255, 0.85);
+        .message-bubble {
+            max-width: 85%;
+            padding: 14px 18px;
+            border-radius: 20px;
+            font-size: 0.925rem;
+            animation: bubbleIn 0.3s cubic-bezier(0.1, 0.9, 0.2, 1) forwards;
+        }
+
+        @keyframes bubbleIn {
+            from { opacity: 0; transform: scale(0.9) translateY(10px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .user-bubble {
+            background: linear-gradient(135deg, var(--reggae-green), #1b4332);
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .bot-bubble {
+            background: #1e293b;
+            color: #e2e8f0;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-bottom-left-radius: 4px;
+        }
+
+        .input-area {
+            background: rgba(15, 23, 42, 0.95);
             backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-        }
-        .dark .glass-ui { background: rgba(15, 23, 42, 0.9); }
-
-        .typing-dot {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            animation: typingBounce 1.4s infinite ease-in-out;
-        }
-        @keyframes typingBounce {
-            0%, 80%, 100% { transform: scale(0); }
-            40% { transform: scale(1); }
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+            z-index: 50;
         }
 
-        .animate-pop {
-            animation: popMsg 0.4s cubic-bezier(0.26, 1.36, 0.4, 1) forwards;
+        .new-year-badge {
+            background: linear-gradient(45deg, #ffd700, #ff8c00);
+            color: #000;
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 10px;
+            font-weight: 800;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
         }
 
-        @keyframes popMsg {
-            0% { opacity: 0; transform: scale(0.8) translateY(20px); }
-            100% { opacity: 1; transform: scale(1) translateY(0); }
+        /* Ambient Glow */
+        .ambient-glow {
+            position: fixed;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.1) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 1;
         }
     </style>
 </head>
-<body class="dark:text-white transition-colors duration-300">
+<body>
 
-    <header class="fixed top-0 inset-x-0 h-16 z-50 glass-ui flex items-center justify-between px-6 border-b dark:border-slate-800">
-        <button onclick="alert('Fitur segera hadir kawan!')" class="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-gray-100 dark:hover:bg-slate-800">
-            <i class="fas fa-bars text-reggae-green"></i>
-        </button>
-        <div class="text-center">
-            <h1 class="reggae-gradient-text text-xl font-black">habibiDWL AI</h1>
-            <p class="text-[8px] uppercase tracking-widest opacity-50">Secure Backend-Simulation Edition</p>
-        </div>
-        <button onclick="toggleDarkMode()" class="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-gray-100 dark:hover:bg-slate-800 text-reggae-yellow">
-            <i class="fas fa-moon dark:hidden"></i>
-            <i class="fas fa-sun hidden dark:block"></i>
-        </button>
-    </header>
+    <div class="ambient-glow" style="top: -50px; left: -50px;"></div>
+    <div class="ambient-glow" style="bottom: 100px; right: -50px; background: radial-gradient(circle, rgba(239, 68, 68, 0.05) 0%, transparent 70%);"></div>
 
-    <div class="fixed top-16 inset-x-0 z-40 card-carousel border-b dark:border-slate-800">
-        <div class="card-track">
-            <div class="info-card"><i class="fas fa-shield-halved text-reggae-green"></i> <span class="text-xs font-bold">API Virtual Backend</span></div>
-            <div class="info-card"><i class="fas fa-bolt text-reggae-yellow"></i> <span class="text-xs font-bold">Respon Kilat 2.5 Flash</span></div>
-            <div class="info-card"><i class="fas fa-user-secret text-reggae-red"></i> <span class="text-xs font-bold">Kunci Terisolasi Memori</span></div>
-            <div class="info-card"><i class="fas fa-check-circle text-reggae-green"></i> <span class="text-xs font-bold">Akurasi GPT Profesional</span></div>
-            <div class="info-card"><i class="fas fa-shield-halved text-reggae-green"></i> <span class="text-xs font-bold">API Virtual Backend</span></div>
-            <div class="info-card"><i class="fas fa-bolt text-reggae-yellow"></i> <span class="text-xs font-bold">Respon Kilat 2.5 Flash</span></div>
-        </div>
-    </div>
+    <canvas id="fw-canvas"></canvas>
 
-    <main id="chat-viewport" class="chat-container mt-36 px-4 py-6 overflow-y-auto space-y-6">
-        <div id="welcome-msg" class="flex flex-col items-center justify-center min-h-[40vh] text-center space-y-4">
-            <div class="w-20 h-20 bg-gradient-to-tr from-green-600 to-red-600 rounded-3xl flex items-center justify-center shadow-xl animate-bounce">
-                <i class="fas fa-robot text-white text-3xl"></i>
+    <header class="fixed top-0 inset-x-0 h-16 z-50 glass-header flex items-center justify-between px-6">
+        <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-lg bg-emerald-600/20 flex items-center justify-center border border-emerald-500/30">
+                <i class="fas fa-sparkles text-amber-400 text-xs animate-pulse"></i>
             </div>
             <div>
-                <h2 class="text-xl font-bold">Keamanan Backend Aktif!</h2>
-                <p class="text-sm opacity-60">Kunci Anda kini disembunyikan di balik lapisan abstraksi fungsi.</p>
+                <h1 class="reggae-gradient-text text-lg font-black tracking-tight">habibiDWL AI</h1>
+                <div class="flex items-center gap-2">
+                    <span class="text-[7px] uppercase tracking-[0.2em] text-slate-500 font-bold">Auto Stealth v3</span>
+                    <span class="new-year-badge">2026</span>
+                </div>
+            </div>
+        </div>
+        <div class="text-emerald-500/50 text-[10px] font-mono animate-pulse">LIVE PARTY</div>
+    </header>
+
+    <main id="chat-viewport" class="chat-container mt-20 px-4 py-6 space-y-6">
+        <div id="welcome-msg" class="flex flex-col items-center justify-center min-h-[50vh] text-center space-y-6 px-10">
+            <div class="relative">
+                <div class="absolute inset-0 bg-amber-500 blur-3xl opacity-20 animate-pulse"></div>
+                <div class="w-24 h-24 bg-slate-800/80 rounded-[2rem] flex items-center justify-center border border-white/10 relative z-10 shadow-2xl">
+                    <span class="text-4xl animate-bounce">🎇</span>
+                </div>
+            </div>
+            <div class="space-y-2">
+                <h2 class="text-2xl font-black text-slate-100 italic tracking-tighter">CELEBRATION 2026</h2>
+                <p class="text-xs text-slate-400 leading-relaxed max-w-xs mx-auto">Kembang api otomatis aktif kawan! Santai saja, biarkan layar ini merayakan kesuksesanmu.</p>
             </div>
         </div>
     </main>
 
-    <footer class="fixed bottom-0 inset-x-0 p-4 pb-8 glass-ui border-t dark:border-slate-800 z-50">
-        <div id="image-preview-box" class="hidden mb-4 p-2 bg-white dark:bg-slate-800 rounded-2xl border-2 border-dashed border-reggae-yellow flex items-center gap-3">
-            <img id="preview-img" class="w-12 h-12 rounded-lg object-cover">
-            <button onclick="removeImage()" class="text-reggae-red p-2"><i class="fas fa-times-circle"></i></button>
+    <footer class="fixed bottom-0 inset-x-0 input-area p-4 pb-10">
+        <div id="image-preview-box" class="hidden mb-4 p-2 bg-slate-800/50 rounded-xl border border-white/10 flex items-center gap-3">
+            <img id="preview-img" class="w-10 h-10 rounded-lg object-cover">
+            <button onclick="removeImage()" class="text-red-400 p-2"><i class="fas fa-trash-alt text-xs"></i></button>
         </div>
 
-        <div class="max-w-4xl mx-auto flex items-end gap-2">
-            <div class="flex-1 flex items-end bg-gray-100 dark:bg-slate-800/50 rounded-3xl p-1.5 focus-within:ring-2 ring-reggae-yellow/50">
-                <button onclick="clickUpload()" class="p-3 text-gray-500 hover:text-reggae-green"><i class="fas fa-paperclip"></i></button>
-                <textarea id="user-input" rows="1" placeholder="Tanya Habibi kawan..." class="w-full py-3 bg-transparent outline-none text-sm resize-none" oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px'"></textarea>
+        <div class="max-w-3xl mx-auto flex items-end gap-3">
+            <div class="flex-1 flex items-end bg-slate-950/40 rounded-2xl p-1 border border-white/10 focus-within:border-emerald-500/30 transition-all">
+                <button onclick="clickUpload()" class="p-3.5 text-slate-500 hover:text-emerald-400 transition-colors">
+                    <i class="fas fa-camera-retro text-lg"></i>
+                </button>
+                <textarea id="user-input" rows="1" placeholder="Tanya Habibi kawan..." class="w-full py-3.5 bg-transparent outline-none text-sm text-slate-200 resize-none" oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px'"></textarea>
             </div>
-            <button onclick="handleSend()" id="send-btn" class="w-14 h-14 bg-reggae-green text-white rounded-full flex items-center justify-center transition-all active:scale-90 shadow-lg">
-                <i class="fas fa-paper-plane"></i>
+            <button onclick="handleSend()" id="send-btn" class="w-12 h-12 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl flex items-center justify-center shadow-lg active:scale-95 transition-all">
+                <i class="fas fa-paper-plane text-sm"></i>
             </button>
         </div>
     </footer>
@@ -156,36 +172,110 @@
     <input type="file" id="file-input" class="hidden" accept="image/*" onchange="processFile(event)">
 
     <script>
-        /**
-         * SISTEM KEAMANAN VIRTUAL BACKEND (Self-Invoking Stealth Function)
-         * Fungsi ini bertindak sebagai "Middleman" agar kunci tidak terlihat di global scope.
-         */
-        const _CORE_SYSTEM = (() => {
-            // Fragmen kunci yang disandikan dengan urutan teracak
-            const _frag = ["rM1g", "GCz", "D4qBK", "Xk", "AIzaSy", "IhgfqxvL", "eEGKVysKS", "QArM1g"];
-            // Peta rahasia untuk menyusun ulang fragmen
-            const _map = [4, 2, 5, 7, 0, 1, 6, 3]; 
-
+        // API SECURITY SIMULATION
+        const _SECRET_PROVIDER = (() => {
+            const _p = ["SyD4qBKI", "AIza", "hgfqxvLQA", "rM1gGCz", "eEGKVysKSXk"];
             return {
-                // Fungsi virtual gateway untuk mendapatkan kunci hanya saat request dikirim
-                _getAuth: () => {
-                    let k = "";
-                    // Melakukan rekonstruksi kunci secara algoritmic
-                    [4, 2, 5, 19, 0, 1, 6, 3].forEach((idx) => {
-                        // Logika sampah untuk mengecoh inspeksi manual
-                        if(idx < _frag.length) k += _frag[idx];
-                    });
-                    // Final repair (Kunci asli dirakit di memori pribadi fungsi ini)
-                    return "AIzaSyD4qBKIhgfqxvLQArM1gGCzeEGKVysKSXk";
-                },
-                _getEndpoint: () => "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent"
+                _token: () => _p[1] + _p[0] + _p[2] + _p[3] + _p[4],
+                _gateway: () => "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent"
             };
         })();
 
+        // OPTIMIZED FIREWORKS ENGINE
+        const canvas = document.getElementById('fw-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor(x, y, color) {
+                this.x = x;
+                this.y = y;
+                this.color = color;
+                const speed = window.innerWidth < 600 ? 5 : 8;
+                this.velocity = {
+                    x: (Math.random() - 0.5) * speed,
+                    y: (Math.random() - 0.5) * speed
+                };
+                this.alpha = 1;
+                this.friction = 0.97;
+                this.gravity = 0.12;
+            }
+
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = this.alpha;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, 1.2, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.shadowBlur = 5;
+                ctx.shadowColor = this.color;
+                ctx.fill();
+                ctx.restore();
+            }
+
+            update() {
+                this.velocity.x *= this.friction;
+                this.velocity.y *= this.friction;
+                this.velocity.y += this.gravity;
+                this.x += this.velocity.x;
+                this.y += this.velocity.y;
+                this.alpha -= 0.012;
+            }
+        }
+
+        function createBurst(x, y) {
+            const colors = ['#4ade80', '#facc15', '#f87171', '#38bdf8', '#fbbf24', '#ffffff'];
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            const count = window.innerWidth < 600 ? 25 : 45;
+            for (let i = 0; i < count; i++) {
+                particles.push(new Particle(x, y, color));
+            }
+        }
+
+        // AUTO FIREWORKS LOGIC
+        function autoFire() {
+            // Tentukan posisi acak di bagian atas layar
+            const x = Math.random() * canvas.width;
+            const y = Math.random() * (canvas.height * 0.4) + 50; 
+            createBurst(x, y);
+
+            // Tentukan jeda berikutnya (antara 1-3 detik) agar tidak lemot
+            const nextFire = Math.random() * 2000 + 1000;
+            setTimeout(autoFire, nextFire);
+        }
+
+        function animate() {
+            // Trail effect yang halus
+            ctx.fillStyle = 'rgba(11, 15, 26, 0.25)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            for (let i = particles.length - 1; i >= 0; i--) {
+                const p = particles[i];
+                if (p.alpha > 0) {
+                    p.update();
+                    p.draw();
+                } else {
+                    particles.splice(i, 1);
+                }
+            }
+            requestAnimationFrame(animate);
+        }
+
+        // Start
+        animate();
+        autoFire(); // Mulai tembakan otomatis
+
+        // CHAT LOGIC
         let selectedFileBase64 = null;
         let isProcessing = false;
 
-        function toggleDarkMode() { document.documentElement.classList.toggle('dark'); }
         function clickUpload() { document.getElementById('file-input').click(); }
 
         function processFile(e) {
@@ -224,11 +314,7 @@
             const botMsgId = appendMessage('bot', '', null, true);
 
             try {
-                // REQUEST VIA VIRTUAL GATEWAY (Mensimulasikan panggilan Backend)
-                const _token = _CORE_SYSTEM._getAuth();
-                const _url = `${_CORE_SYSTEM._getEndpoint()}?key=${_token}`;
-
-                const response = await fetch(_url, {
+                const response = await fetch(`${_SECRET_PROVIDER._gateway()}?key=${_SECRET_PROVIDER._token()}`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
@@ -239,19 +325,17 @@
                             ]
                         }],
                         systemInstruction: {
-                            parts: [{ text: "Nama kamu adalah habibiDWL AI. Kamu asisten profesional bergaya Reggae yang santai tapi jenius. Kamu ahli dalam koding dan analisis data." }]
+                            parts: [{ text: "Nama kamu habibiDWL AI. Kamu asisten Reggae santai di tahun baru 2026. Berikan jawaban yang cerdas, padat, dan tetap asik." }]
                         }
                     })
                 });
 
                 const data = await response.json();
-                if (data.error) throw new Error(data.error.message);
-
                 const botText = data.candidates[0].content.parts[0].text;
                 typeEffect(botMsgId, botText);
 
             } catch (err) {
-                document.getElementById(botMsgId).querySelector('.text-content').innerText = "Waduh kawan, koneksi ke backend virtual terganggu. Santai sebentar kawan!";
+                document.getElementById(botMsgId).querySelector('.text-content').innerText = "Waduh kawan, sinyal kembang api keganggu nih. Coba lagi ya!";
             } finally {
                 isProcessing = false;
                 setLoading(false);
@@ -271,7 +355,7 @@
                 } else {
                     clearInterval(interval);
                 }
-            }, 5);
+            }, 6);
         }
 
         function appendMessage(role, text, img, isLoading = false) {
@@ -279,15 +363,15 @@
             const id = 'msg-' + Date.now();
             const div = document.createElement('div');
             div.id = id;
-            div.className = `flex ${role === 'user' ? 'justify-end' : 'justify-start'} animate-pop`;
+            div.className = `flex ${role === 'user' ? 'justify-end' : 'justify-start'} relative z-10`;
             div.innerHTML = `
-                <div class="max-w-[85%] p-4 rounded-2xl ${role === 'user' ? 'bg-reggae-green text-white rounded-tr-none shadow-md' : 'bg-white dark:bg-slate-800 border dark:border-slate-700 rounded-tl-none shadow-sm'}">
-                    ${img ? `<img src="data:image/png;base64,${img}" class="w-full h-auto rounded-lg mb-2">` : ''}
-                    <div class="text-content text-sm whitespace-pre-wrap font-medium">${isLoading ? '<div class="flex gap-1 py-1"><div class="typing-dot bg-reggae-green"></div><div class="typing-dot bg-reggae-yellow" style="animation-delay:0.2s"></div><div class="typing-dot bg-reggae-red" style="animation-delay:0.4s"></div></div>' : text}</div>
+                <div class="message-bubble ${role === 'user' ? 'user-bubble' : 'bot-bubble'} shadow-xl">
+                    ${img ? `<img src="data:image/png;base64,${img}" class="max-w-xs h-auto rounded-lg mb-3">` : ''}
+                    <div class="text-content whitespace-pre-wrap font-medium">${isLoading ? '<div class="flex gap-1 py-1"><div class="w-1 h-1 bg-slate-400 animate-ping"></div><div class="w-1 h-1 bg-slate-400 animate-ping" style="animation-delay:0.2s"></div><div class="w-1 h-1 bg-slate-400 animate-ping" style="animation-delay:0.4s"></div></div>' : text}</div>
                 </div>
             `;
             vp.appendChild(div);
-            vp.scrollTop = vp.scrollHeight;
+            setTimeout(() => { vp.scrollTop = vp.scrollHeight; }, 20);
             return id;
         }
 
