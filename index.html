@@ -24,7 +24,6 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* Canvas Fireworks */
         #fw-canvas {
             position: fixed;
             top: 0;
@@ -36,7 +35,6 @@
             opacity: 0.4;
         }
 
-        /* Tarim Skyline Background */
         .tarim-skyline {
             position: fixed;
             bottom: 0;
@@ -53,7 +51,7 @@
             bottom: 0;
             width: 100%;
             height: 120px;
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 200" preserveAspectRatio="none"><path d="M0,200 L0,150 L30,150 L30,120 L60,120 L60,150 L100,150 L100,80 L130,80 L130,50 L160,50 L160,80 L190,80 L190,150 L250,150 L250,100 L300,100 L300,150 L350,150 L350,40 L380,40 L380,10 L410,40 L440,40 L440,150 L500,150 L500,90 L550,90 L550,150 L620,150 L620,70 L650,70 L650,40 L680,70 L710,70 L710,150 L780,150 L780,110 L830,110 L830,150 L900,150 L900,60 L930,60 L930,30 L960,60 L990,60 L1000,60 L1000,200 Z" fill="%231e1814"/></svg>');
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 1000 200\" preserveAspectRatio=\"none\"><path d=\"M0,200 L0,150 L30,150 L30,120 L60,120 L60,150 L100,150 L100,80 L130,80 L130,50 L160,50 L160,80 L190,80 L190,150 L250,150 L250,100 L300,100 L300,150 L350,150 L350,40 L380,40 L380,10 L410,40 L440,40 L440,150 L500,150 L500,90 L550,90 L550,150 L620,150 L620,70 L650,70 L650,40 L680,70 L710,70 L710,150 L780,150 L780,110 L830,110 L830,150 L900,150 L900,60 L930,60 L930,30 L960,60 L990,60 L1000,60 L1000,200 Z\" fill=\"%231e1814\"/></svg>');
             background-size: 100% 100%;
             opacity: 0.6;
         }
@@ -61,7 +59,6 @@
         .glass-header {
             background: rgba(15, 13, 11, 0.8);
             backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
             border-bottom: 1px solid rgba(166, 124, 82, 0.2);
         }
 
@@ -85,7 +82,7 @@
             padding: 40px 30px;
             max-width: 400px;
             width: 100%;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
         }
 
         .server-status {
@@ -113,18 +110,16 @@
         }
 
         @keyframes pulse {
-            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7); }
-            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(245, 158, 11, 0); }
-            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(245,158,11,0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(245,158,11,0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(245,158,11,0); }
         }
 
         .maintenance-title {
             font-size: 32px;
             font-weight: 900;
             color: #fff;
-            line-height: 1.1;
             margin-bottom: 12px;
-            letter-spacing: -1px;
         }
 
         .maintenance-subtitle {
@@ -136,7 +131,7 @@
         .progress-bar-bg {
             width: 100%;
             height: 6px;
-            background: rgba(166, 124, 82, 0.1);
+            background: rgba(166,124,82,0.1);
             border-radius: 10px;
             overflow: hidden;
             margin-bottom: 10px;
@@ -145,18 +140,16 @@
         .progress-bar-fill {
             height: 100%;
             width: 65%;
-            background: linear-gradient(90deg, #a67c52, #f59e0b);
+            background: linear-gradient(90deg,#a67c52,#f59e0b);
             border-radius: 10px;
             transition: width 1s ease-in-out;
         }
 
-        .arabic-font {
-            font-family: 'Amiri', serif;
-        }
+        .arabic-font { font-family: 'Amiri', serif; }
 
         .input-area-disabled {
-            background: rgba(15, 13, 11, 0.9);
-            border-top: 1px solid rgba(166, 124, 82, 0.1);
+            background: rgba(15,13,11,0.9);
+            border-top: 1px solid rgba(166,124,82,0.1);
             filter: grayscale(1);
             opacity: 0.5;
             pointer-events: none;
@@ -177,7 +170,7 @@
                 <i class="fas fa-cog fa-spin text-amber-500 text-sm"></i>
             </div>
             <div>
-                <h1 class="text-amber-200 text-lg font-black tracking-tight">habibiDWL AI</h1>
+                <h1 class="text-amber-200 text-lg font-black">habibiDWL AI</h1>
                 <div class="flex items-center gap-2">
                     <span class="text-[8px] uppercase tracking-widest text-amber-600 font-bold">System Status</span>
                     <span class="bg-amber-600 text-black px-2 py-0.5 rounded font-black text-[10px]">2026</span>
@@ -206,6 +199,7 @@
             <div class="progress-bar-bg">
                 <div class="progress-bar-fill"></div>
             </div>
+
             <div class="flex justify-between text-[10px] font-bold text-amber-700 uppercase tracking-tighter">
                 <span>Optimizing Core</span>
                 <span>65% Done</span>
@@ -213,7 +207,7 @@
 
             <div class="mt-8 pt-6 border-t border-amber-900/30">
                 <p class="text-[11px] text-amber-200/50 leading-relaxed">
-                    Mohon tunggu sejenak, server sedang dalam sinkronisasi data Seluruh kunci akses eksternal telah dinonaktifkan demi keamanan.
+                    Mohon tunggu sejenak, server sedang dalam sinkronisasi data. Seluruh kunci akses eksternal telah dinonaktifkan demi keamanan.
                 </p>
             </div>
         </div>
@@ -232,7 +226,6 @@
     </footer>
 
     <script>
-    
         const canvas = document.getElementById('fw-canvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
@@ -318,3 +311,4 @@
     </script>
 </body>
 </html>
+
