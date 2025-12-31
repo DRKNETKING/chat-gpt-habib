@@ -3,28 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>habibiDWL AI - New Year 2026 Auto</title>
+    <title>habibiDWL AI - Tarim 2026</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Amiri:wght@400;700&display=swap');
         
         :root {
-            --reggae-green: #2e7d32;
-            --reggae-yellow: #f9a825;
-            --reggae-red: #c62828;
-            --dark-bg: #0b0f1a;
+            --tarim-brown: #a67c52;
+            --tarim-sand: #e3c39d;
+            --dark-deep: #1a1612;
+            --clay-bg: #2d241e;
         }
 
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: var(--dark-bg);
+            background-color: var(--dark-deep);
             color: #f1f5f9;
             overflow: hidden;
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* Canvas Background */
+        /* Canvas Fireworks */
         #fw-canvas {
             position: fixed;
             top: 0;
@@ -33,20 +33,36 @@
             height: 100%;
             pointer-events: none;
             z-index: 5;
+            opacity: 0.6; /* Dibuat sedikit transparan agar nuansa kota tetap terlihat */
+        }
+
+        /* Tarim Skyline Background */
+        .tarim-skyline {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 40vh;
+            background: linear-gradient(to top, var(--clay-bg), transparent);
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .tarim-silhouette {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 150px;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 200" preserveAspectRatio="none"><path d="M0,200 L0,150 L30,150 L30,120 L60,120 L60,150 L100,150 L100,80 L130,80 L130,50 L160,50 L160,80 L190,80 L190,150 L250,150 L250,100 L300,100 L300,150 L350,150 L350,40 L380,40 L380,10 L410,40 L440,40 L440,150 L500,150 L500,90 L550,90 L550,150 L620,150 L620,70 L650,70 L650,40 L680,70 L710,70 L710,150 L780,150 L780,110 L830,110 L830,150 L900,150 L900,60 L930,60 L930,30 L960,60 L990,60 L1000,60 L1000,200 Z" fill="%232d241e"/></svg>');
+            background-size: 100% 100%;
+            opacity: 0.8;
         }
 
         .glass-header {
-            background: rgba(11, 15, 26, 0.85);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .reggae-gradient-text {
-            background: linear-gradient(90deg, #4ade80, #facc15, #f87171);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-weight: 800;
+            background: rgba(26, 22, 18, 0.85);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(166, 124, 82, 0.2);
         }
 
         .chat-container {
@@ -55,6 +71,7 @@
             overflow-y: auto;
             position: relative;
             z-index: 10;
+            padding-bottom: 100px;
         }
 
         .message-bubble {
@@ -62,6 +79,7 @@
             padding: 14px 18px;
             border-radius: 20px;
             font-size: 0.925rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
             animation: bubbleIn 0.3s cubic-bezier(0.1, 0.9, 0.2, 1) forwards;
         }
 
@@ -71,100 +89,102 @@
         }
 
         .user-bubble {
-            background: linear-gradient(135deg, var(--reggae-green), #1b4332);
+            background: linear-gradient(135deg, #a67c52, #7a5a3a);
             color: white;
             border-bottom-right-radius: 4px;
         }
 
         .bot-bubble {
-            background: #1e293b;
-            color: #e2e8f0;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            background: #2d241e;
+            color: #e3c39d;
+            border: 1px solid rgba(166, 124, 82, 0.2);
             border-bottom-left-radius: 4px;
         }
 
         .input-area {
-            background: rgba(15, 23, 42, 0.95);
+            background: rgba(26, 22, 18, 0.95);
             backdrop-filter: blur(20px);
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            border-top: 1px solid rgba(166, 124, 82, 0.2);
             position: relative;
             z-index: 50;
         }
 
-        .new-year-badge {
-            background: linear-gradient(45deg, #ffd700, #ff8c00);
-            color: #000;
+        .tarim-badge {
+            background: #a67c52;
+            color: #1a1612;
             padding: 2px 8px;
-            border-radius: 6px;
+            border-radius: 4px;
             font-size: 10px;
             font-weight: 800;
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
         }
 
-        /* Ambient Glow */
-        .ambient-glow {
-            position: fixed;
-            width: 300px;
-            height: 300px;
-            background: radial-gradient(circle, rgba(16, 185, 129, 0.1) 0%, transparent 70%);
-            pointer-events: none;
-            z-index: 1;
+        .arabic-font {
+            font-family: 'Amiri', serif;
         }
+
+        /* Pulse animation for the city glow */
+        @keyframes cityGlow {
+            0%, 100% { filter: drop-shadow(0 0 5px rgba(166, 124, 82, 0.3)); }
+            50% { filter: drop-shadow(0 0 15px rgba(166, 124, 82, 0.5)); }
+        }
+        .glow-effect { animation: cityGlow 4s infinite; }
     </style>
 </head>
 <body>
 
-    <div class="ambient-glow" style="top: -50px; left: -50px;"></div>
-    <div class="ambient-glow" style="bottom: 100px; right: -50px; background: radial-gradient(circle, rgba(239, 68, 68, 0.05) 0%, transparent 70%);"></div>
-
     <canvas id="fw-canvas"></canvas>
+    
+    <div class="tarim-skyline">
+        <div class="tarim-silhouette"></div>
+    </div>
 
     <header class="fixed top-0 inset-x-0 h-16 z-50 glass-header flex items-center justify-between px-6">
         <div class="flex items-center gap-3">
-            <div class="w-8 h-8 rounded-lg bg-emerald-600/20 flex items-center justify-center border border-emerald-500/30">
-                <i class="fas fa-sparkles text-amber-400 text-xs animate-pulse"></i>
+            <div class="w-9 h-9 rounded-xl bg-amber-900/30 flex items-center justify-center border border-amber-700/30">
+                <i class="fas fa-mosque text-amber-500 text-sm"></i>
             </div>
             <div>
-                <h1 class="reggae-gradient-text text-lg font-black tracking-tight">habibiDWL AI</h1>
+                <h1 class="text-amber-200 text-lg font-black tracking-tight">habibiDWL AI</h1>
                 <div class="flex items-center gap-2">
-                    <span class="text-[7px] uppercase tracking-[0.2em] text-slate-500 font-bold">Auto Stealth v3</span>
-                    <span class="new-year-badge">2026</span>
+                    <span class="text-[8px] uppercase tracking-widest text-amber-600 font-bold">Tarim Edition</span>
+                    <span class="tarim-badge">2026</span>
                 </div>
             </div>
         </div>
-        <div class="text-emerald-500/50 text-[10px] font-mono animate-pulse">LIVE PARTY</div>
+        <div class="arabic-font text-amber-600/60 text-lg">تريم الغناء</div>
     </header>
 
     <main id="chat-viewport" class="chat-container mt-20 px-4 py-6 space-y-6">
-        <div id="welcome-msg" class="flex flex-col items-center justify-center min-h-[50vh] text-center space-y-6 px-10">
-            <div class="relative">
-                <div class="absolute inset-0 bg-amber-500 blur-3xl opacity-20 animate-pulse"></div>
-                <div class="w-24 h-24 bg-slate-800/80 rounded-[2rem] flex items-center justify-center border border-white/10 relative z-10 shadow-2xl">
-                    <span class="text-4xl animate-bounce">🎇</span>
+        <div id="welcome-msg" class="flex flex-col items-center justify-center min-h-[55vh] text-center space-y-6 px-10">
+            <div class="relative glow-effect">
+                <div class="absolute inset-0 bg-amber-600 blur-3xl opacity-20"></div>
+                <div class="w-24 h-24 bg-amber-900/20 rounded-[2.5rem] flex items-center justify-center border border-amber-600/30 relative z-10 shadow-2xl">
+                    <i class="fas fa-moon text-amber-400 text-4xl"></i>
                 </div>
             </div>
             <div class="space-y-2">
-                <h2 class="text-2xl font-black text-slate-100 italic tracking-tighter">CELEBRATION 2026</h2>
-                <p class="text-xs text-slate-400 leading-relaxed max-w-xs mx-auto">Kembang api otomatis aktif kawan! Santai saja, biarkan layar ini merayakan kesuksesanmu.</p>
+                <h2 class="text-2xl font-black text-amber-100 italic tracking-tighter">HADRAMAUT 2026</h2>
+                <p class="text-[11px] text-amber-600/80 uppercase font-bold tracking-[0.3em]">Mubarak Al-Aam Al-Jadid</p>
+                <p class="text-xs text-amber-200/60 leading-relaxed max-w-xs mx-auto">Selamat Tahun Baru 2026 kawan. Nuansa Kota Tarim yang tenang menyertai setiap diskusi kita di sini.</p>
             </div>
         </div>
     </main>
 
     <footer class="fixed bottom-0 inset-x-0 input-area p-4 pb-10">
-        <div id="image-preview-box" class="hidden mb-4 p-2 bg-slate-800/50 rounded-xl border border-white/10 flex items-center gap-3">
+        <div id="image-preview-box" class="hidden mb-4 p-2 bg-amber-900/20 rounded-xl border border-amber-600/20 flex items-center gap-3">
             <img id="preview-img" class="w-10 h-10 rounded-lg object-cover">
-            <button onclick="removeImage()" class="text-red-400 p-2"><i class="fas fa-trash-alt text-xs"></i></button>
+            <button onclick="removeImage()" class="text-amber-500 p-2"><i class="fas fa-times"></i></button>
         </div>
 
         <div class="max-w-3xl mx-auto flex items-end gap-3">
-            <div class="flex-1 flex items-end bg-slate-950/40 rounded-2xl p-1 border border-white/10 focus-within:border-emerald-500/30 transition-all">
-                <button onclick="clickUpload()" class="p-3.5 text-slate-500 hover:text-emerald-400 transition-colors">
-                    <i class="fas fa-camera-retro text-lg"></i>
+            <div class="flex-1 flex items-end bg-amber-950/20 rounded-2xl p-1 border border-amber-600/20 focus-within:border-amber-500/50 transition-all">
+                <button onclick="clickUpload()" class="p-3.5 text-amber-700 hover:text-amber-500 transition-colors">
+                    <i class="fas fa-paperclip text-lg"></i>
                 </button>
-                <textarea id="user-input" rows="1" placeholder="Tanya Habibi kawan..." class="w-full py-3.5 bg-transparent outline-none text-sm text-slate-200 resize-none" oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px'"></textarea>
+                <textarea id="user-input" rows="1" placeholder="Ketik pesan..." class="w-full py-3.5 bg-transparent outline-none text-sm text-amber-100 placeholder-amber-800 resize-none" oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px'"></textarea>
             </div>
-            <button onclick="handleSend()" id="send-btn" class="w-12 h-12 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl flex items-center justify-center shadow-lg active:scale-95 transition-all">
-                <i class="fas fa-paper-plane text-sm"></i>
+            <button onclick="handleSend()" id="send-btn" class="w-12 h-12 bg-amber-700 hover:bg-amber-600 text-amber-100 rounded-xl flex items-center justify-center shadow-lg active:scale-95 transition-all">
+                <i class="fas fa-chevron-right"></i>
             </button>
         </div>
     </footer>
@@ -172,7 +192,7 @@
     <input type="file" id="file-input" class="hidden" accept="image/*" onchange="processFile(event)">
 
     <script>
-        // API SECURITY SIMULATION
+        // API SECURITY - Fragmented & Protected
         const _SECRET_PROVIDER = (() => {
             const _p = ["SyD4qBKI", "AIza", "hgfqxvLQA", "rM1gGCz", "eEGKVysKSXk"];
             return {
@@ -181,7 +201,7 @@
             };
         })();
 
-        // OPTIMIZED FIREWORKS ENGINE
+        // OPTIMIZED FIREWORKS ENGINE (Silent & Smooth)
         const canvas = document.getElementById('fw-canvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
@@ -198,24 +218,22 @@
                 this.x = x;
                 this.y = y;
                 this.color = color;
-                const speed = window.innerWidth < 600 ? 5 : 8;
+                const speed = window.innerWidth < 600 ? 4 : 6;
                 this.velocity = {
                     x: (Math.random() - 0.5) * speed,
                     y: (Math.random() - 0.5) * speed
                 };
                 this.alpha = 1;
-                this.friction = 0.97;
-                this.gravity = 0.12;
+                this.friction = 0.98;
+                this.gravity = 0.08;
             }
 
             draw() {
                 ctx.save();
                 ctx.globalAlpha = this.alpha;
                 ctx.beginPath();
-                ctx.arc(this.x, this.y, 1.2, 0, Math.PI * 2);
+                ctx.arc(this.x, this.y, 1, 0, Math.PI * 2);
                 ctx.fillStyle = this.color;
-                ctx.shadowBlur = 5;
-                ctx.shadowColor = this.color;
                 ctx.fill();
                 ctx.restore();
             }
@@ -226,34 +244,30 @@
                 this.velocity.y += this.gravity;
                 this.x += this.velocity.x;
                 this.y += this.velocity.y;
-                this.alpha -= 0.012;
+                this.alpha -= 0.01;
             }
         }
 
         function createBurst(x, y) {
-            const colors = ['#4ade80', '#facc15', '#f87171', '#38bdf8', '#fbbf24', '#ffffff'];
+            const colors = ['#fde68a', '#f59e0b', '#d97706', '#ffffff', '#78350f'];
             const color = colors[Math.floor(Math.random() * colors.length)];
-            const count = window.innerWidth < 600 ? 25 : 45;
+            const count = window.innerWidth < 600 ? 20 : 35;
             for (let i = 0; i < count; i++) {
                 particles.push(new Particle(x, y, color));
             }
         }
 
-        // AUTO FIREWORKS LOGIC
         function autoFire() {
-            // Tentukan posisi acak di bagian atas layar
-            const x = Math.random() * canvas.width;
-            const y = Math.random() * (canvas.height * 0.4) + 50; 
-            createBurst(x, y);
-
-            // Tentukan jeda berikutnya (antara 1-3 detik) agar tidak lemot
-            const nextFire = Math.random() * 2000 + 1000;
-            setTimeout(autoFire, nextFire);
+            if (Math.random() > 0.3) {
+                const x = Math.random() * canvas.width;
+                const y = Math.random() * (canvas.height * 0.3) + 50; 
+                createBurst(x, y);
+            }
+            setTimeout(autoFire, Math.random() * 2500 + 1500);
         }
 
         function animate() {
-            // Trail effect yang halus
-            ctx.fillStyle = 'rgba(11, 15, 26, 0.25)';
+            ctx.fillStyle = 'rgba(26, 22, 18, 0.2)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             
             for (let i = particles.length - 1; i >= 0; i--) {
@@ -268,9 +282,8 @@
             requestAnimationFrame(animate);
         }
 
-        // Start
         animate();
-        autoFire(); // Mulai tembakan otomatis
+        autoFire();
 
         // CHAT LOGIC
         let selectedFileBase64 = null;
@@ -320,12 +333,12 @@
                     body: JSON.stringify({
                         contents: [{
                             parts: [
-                                { text: message || "Halo kawan!" },
+                                { text: message || "Assalamu'alaikum" },
                                 ...(currentImg ? [{ inlineData: { mimeType: "image/png", data: currentImg } }] : [])
                             ]
                         }],
                         systemInstruction: {
-                            parts: [{ text: "Nama kamu habibiDWL AI. Kamu asisten Reggae santai di tahun baru 2026. Berikan jawaban yang cerdas, padat, dan tetap asik." }]
+                            parts: [{ text: "Nama kamu habibiDWL AI. Kamu asisten yang sangat sopan, bijak, dan tenang dengan nuansa Kota Tarim. Berikan jawaban yang cerdas, padat, dan menyejukkan." }]
                         }
                     })
                 });
@@ -335,7 +348,7 @@
                 typeEffect(botMsgId, botText);
 
             } catch (err) {
-                document.getElementById(botMsgId).querySelector('.text-content').innerText = "Waduh kawan, sinyal kembang api keganggu nih. Coba lagi ya!";
+                document.getElementById(botMsgId).querySelector('.text-content').innerText = "Mohon maaf kawan, ada kendala koneksi. Coba lagi ya.";
             } finally {
                 isProcessing = false;
                 setLoading(false);
@@ -355,7 +368,7 @@
                 } else {
                     clearInterval(interval);
                 }
-            }, 6);
+            }, 8);
         }
 
         function appendMessage(role, text, img, isLoading = false) {
@@ -365,19 +378,19 @@
             div.id = id;
             div.className = `flex ${role === 'user' ? 'justify-end' : 'justify-start'} relative z-10`;
             div.innerHTML = `
-                <div class="message-bubble ${role === 'user' ? 'user-bubble' : 'bot-bubble'} shadow-xl">
-                    ${img ? `<img src="data:image/png;base64,${img}" class="max-w-xs h-auto rounded-lg mb-3">` : ''}
-                    <div class="text-content whitespace-pre-wrap font-medium">${isLoading ? '<div class="flex gap-1 py-1"><div class="w-1 h-1 bg-slate-400 animate-ping"></div><div class="w-1 h-1 bg-slate-400 animate-ping" style="animation-delay:0.2s"></div><div class="w-1 h-1 bg-slate-400 animate-ping" style="animation-delay:0.4s"></div></div>' : text}</div>
+                <div class="message-bubble ${role === 'user' ? 'user-bubble' : 'bot-bubble'}">
+                    ${img ? `<img src="data:image/png;base64,${img}" class="max-w-xs h-auto rounded-lg mb-3 border border-amber-600/20">` : ''}
+                    <div class="text-content whitespace-pre-wrap font-medium">${isLoading ? '<div class="flex gap-1.5 py-1.5"><div class="w-1.5 h-1.5 bg-amber-600 rounded-full animate-bounce"></div><div class="w-1.5 h-1.5 bg-amber-600 rounded-full animate-bounce" style="animation-delay:0.2s"></div><div class="w-1.5 h-1.5 bg-amber-600 rounded-full animate-bounce" style="animation-delay:0.4s"></div></div>' : text}</div>
                 </div>
             `;
             vp.appendChild(div);
-            setTimeout(() => { vp.scrollTop = vp.scrollHeight; }, 20);
+            setTimeout(() => { vp.scrollTop = vp.scrollHeight; }, 30);
             return id;
         }
 
         function setLoading(l) {
             const btn = document.getElementById('send-btn');
-            btn.innerHTML = l ? '<i class="fas fa-spinner fa-spin"></i>' : '<i class="fas fa-paper-plane"></i>';
+            btn.innerHTML = l ? '<i class="fas fa-spinner fa-spin"></i>' : '<i class="fas fa-chevron-right"></i>';
             btn.disabled = l;
         }
 
